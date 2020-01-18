@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+
+<h1 style="size: 100%; color: blue">Power Contract</h1>
+<div style="margin: auto;
+  			width: 40%;
+  			border: 10px solid black;
+  			padding: 10px"
+  			>
+		
+	<h1>Max Number = {{ result.Max_Number }}</h1>
+	<h1>Max PowerBall Number = {{ result.Max_Powerball_Number }}</h1>
+	<h1>Current Round = {{ result.Current_Round }}</h1>
+	<h1>Ticket Price  = {{ result.Ticket_Price }} HALO</h1>
+	<h1 style="width: 95%">Contract Address = {{ result.address }}</h1>
+	<h1>Winning Numbers for Round {{ result.Current_Round }} Are {{ result.winningNumbers }}</h1>
+	<h1>Round {{ result.Current_Round }} ends <div style="color: red">{{ result.time }}</div></h1>
+	<h1>Jackpot is {{ result.balance_of_contract }} HALO</h1>
+
+
+
+<html>
+
+<head>
+<script type="text/javascript" src="static/js/bignumber.min.js"></script>
+<script type="text/javascript" src="static/dist/web3-light.js"></script>
+<script type="text/javascript">
+   
+    function checkForWeb3() {
+	console.log("Checking for web3");
+	// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+	if (typeof web3 !== 'undefined') {
+		// Use Mist/MetaMask's provider
+		window.web3 = new Web3(web3.currentProvider);
+	}
+}
+
+	checkForWeb3();	
+
+    function watchBalance() {
+        var coinbase = web3.eth.getBalance("0x32Be343B94f860124dC4fEe278FDCBD38C102D88");
+
+        var originalBalance = web3.eth.getBalance(coinbase).toNumber();
+        var balance = web3.fromWei(originalBalance, 'Ether');
+
+        document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
+        document.getElementById('balance').innerText = 'balance: ' + balance ;
+
+        
+        ;
+    }
+
+</script>
+</head>
+<body>
+    <h1>coinbase balance</h1>
+    <button type="button" onClick="watchBalance();">watch balance</button>
+    <div></div>
+    <div id="coinbase"></div>
+    <div id="balance"></div>
+    <div id="ori"></div>
+    <div id="diff"></div>
+</body>
+</html>

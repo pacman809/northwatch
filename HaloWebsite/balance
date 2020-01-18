@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+import os
+from web3 import Web3
+#import system
+
+def pause():
+    #programPause = input("Press the <ENTER> key to continue...")
+	account2 = "0x9ac6cb989635b4f02c76f3dc309dc12becd7c80e"
+	geth_url = "http://192.168.1.139:8545"
+	web3 = Web3(Web3.HTTPProvider(geth_url))
+	balance = web3.eth.getBalance(Web3.toChecksumAddress(account2))
+	halo = web3.fromWei(balance, "ether")
+
+

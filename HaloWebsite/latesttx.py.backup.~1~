@@ -1,0 +1,36 @@
+
+import pymongo
+import inputs
+import time
+from web3 import Web3
+
+def lastTx():
+	
+	display = []
+
+	counter = 0
+	db 			= "halo-explorer-mainnet"
+	myclient 	= pymongo.MongoClient("mongodb://localhost:27017/")
+	mydb 		= myclient[db]
+	myCol 		= mydb["transactions"]
+	base = 100000000
+	iter = 0
+
+
+	
+
+	for x in myCol.find({"$and": [ {"to_address": {"$ne": "0x0000000000000000000000000000000000000000"}}]}).limit(50).sort('block_number', pymongo.DESCENDING):
+		bob = x["input"]
+		bob = str(bob[0:10])
+
+		if bob in inputs.Inputs:
+			result = inputs.Inputs[str(bob)](x)
+			display.append(result)
+
+		if result["descriptor"] == "Claimed MN Reward":
+			result["direction"] = 1
+			display.append(result) 
+			
+	return display
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------

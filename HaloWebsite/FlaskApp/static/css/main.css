@@ -1,0 +1,146 @@
+.link {
+  color: #7F91B9;
+}
+
+#bar {
+
+  color: green;
+}
+
+.button{
+	background-color: #330066;
+	border: none;
+	color: white;
+	padding: 5px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 18px;
+	border-radius: 8px;
+}
+
+
+
+body{ 
+    opacity: 10;
+    transition: opacity 2s;
+    -webkit-transition: opacity 2s; /* Safari */
+    font-family: 'Roboto', sans-serif;
+    background: pink;
+}
+
+
+h1 {
+  color: white;
+}
+header{
+  width: 90%;
+ font-family: 'Roboto', sans-serif;
+ background: #00818a;
+ 
+}
+
+header::after{
+  content: '';
+  display: table;
+  clear: both;
+}
+
+
+
+    li {
+      list-style-type: none;
+      padding: 15px;
+    }
+
+    .navlist {
+      text-decoration: none;
+      list-style-type: none;
+      font-weight: bolder;
+    }
+    table{
+      width: 50%;
+    }
+      table, th, td {
+        text-align: left;
+	padding-right: 5px;
+      }
+      table {
+        border-bottom: 1px solid #848989;
+        border-spacing: 5px;
+        border-collapse: collapse;
+}
+th {
+	color: #dbedf3;
+	 font-family: 'Roboto', sans-serif;
+    border-bottom: 10px solid #57678A;
+    width:25%;
+    font-weight: bolder;
+    font-size: 35px;
+	padding: top 15px;
+	padding-left: 5px;
+}
+
+td {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 5px;
+  color: white;
+  text-decoration: none;
+  text-decoration: none;
+  overflow: auto;
+  overflow-y: scroll;
+  overflow-y: hidden;
+
+}
+
+
+.container{
+  width: 90%;
+  align-items: center;
+  margin: 1 auto;
+  bachground: grey
+}
+.logo{
+  float: left;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+
+}
+
+a:hover {
+  color: grey;
+}
+
+.header1{
+     display: block;
+   }
+.header2{
+	display: none;
+}
+
+section{
+	margin-top: 4em;
+}
+
+.test{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+
+}
+
+img{
+float: left;
+margin: 0;
+}
+

@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: haloexplorer.com
+Token: 79deaa5d22f9b7a62a2d67c0b468eab0289040ab828335d284acffdd60f244a2
