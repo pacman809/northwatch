@@ -17,7 +17,6 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 import os
 from flask import send_from_directory
-from web3 import Web3
 from powerball import powerball
 #--------------------------------------------------------------------------------------------------------------------------
 
@@ -167,9 +166,8 @@ def balance(id):
 
 def transResolve(id):
 
-	#results = TransResults("0x24d185ebe2c0da0ce63f59793abda63062484cf4d8c50d2f4a1c6ea4f1a6c4f9")
+	
 	results = TransResults(id)
-	#value = Web3.fromWei(results["value"], 'Ether')
 	return render_template('transaction.html', results= results)
 
 #-------------------------------------------------------------------------------------------------------------------------------
