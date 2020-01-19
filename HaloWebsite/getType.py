@@ -112,4 +112,8 @@ def GetType(inpoot):
 		answer = type + answer
 		return answer
 
-	
+def timestamp(stamp):
+		time = 			stamp
+		dt = 			datetime.fromtimestamp(time // 1000000000)
+		s = 			dt.strftime('%Y-%m-%d %H:%M:%S')
+		return s

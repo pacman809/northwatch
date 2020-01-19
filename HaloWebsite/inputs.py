@@ -161,9 +161,7 @@ def systemPing(receivedInput):
 	value                           = Web3.fromWei(receivedInput['value'], 'Ether')
 	description                     = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	
-	result							= #Dict
-
-	{
+	result							= {
 
 	"descriptor"                    : DESCRIPTOR,
 	"hash"                          : receivedInput['hash'],
