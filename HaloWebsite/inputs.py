@@ -1,5 +1,4 @@
-# Dictionary of Inputs
-# Top SECRET *** I will find you :)
+
 from web3 import Web3
 import json as simplejson
 from datetime import datetime
@@ -7,6 +6,7 @@ import pymongo
 from web3 import Web3
 import search
 from datetime import datetime
+
 #------------------------------------------------------------------------------------------------------------
 #GENERAL TRANSACTION
 def hextodec(hex):					#Converts Decimal To Hex
@@ -26,19 +26,20 @@ def dectohex(dec):
 
 def parse(input):				#Takes Input And Parses 
 	
-	fields =  		int(len(input))
-	fieldlenth = 	fields - 10
+	fields 		=	int(len(input))
+	fieldlenth 	= 	fields - 10
 	fieldNumber = 	fieldlenth/64
-	a = 			10 
-	x = 			1
-	list = 			[]
+	a 			= 	10 
+	x 			= 	1
+	list		= 	[]
 
 	while x <= fieldNumber:
-		b = 		a + 64
-		sector = 	input[a:b]
-		sect = 		hextodec(sector)
-		a = 		b
-		x = 		x + 1
+		b 		= 	a + 64
+		sector 	= 	input[a:b]
+		sect 	= 	hextodec(sector)
+		a 		= 	b
+		x 		= 	x + 1
+
 		list.append(sect)
 	
 	return list	
@@ -46,12 +47,14 @@ def parse(input):				#Takes Input And Parses
 #-----------------------------------------------------------------------------------------------------------
 
 known_address_contract={
+
 	"0x45842a0f603ef5a5aa44503767c6ab9fd03d824e"	: "STEX Hot Wallet",
 	"0x630583fde8e6899c74d942814a3719b6d544220e"	: "Northwatch Donations",
 	"0xc8a9d002fdaebf5bf03d530c3047d96b44257f10"	: "T4i MN Pool",
 	"0x3fcf16e7090fe013b5648d796908916b2290b6c6"	: "Block And Chain Games",
 	"0x5271aa0ec2e9cc54db55136554a10cf2f7daa82b"	: "HaloDex SC",
 	"0x123ea742a564eaa8e83871618bd9baaf400ff482"	: "LAToken Hot Wallet"
+
 	}
 
 #-----------------------------------------------------------------------------------------------------------
@@ -60,6 +63,7 @@ known_address_contract={
 def tokenType(contract):
 
 	tokens={
+
 	"0xd314d564c36c1b9fbbf6b440122f84da9a551029"	: "ETH",
 	"0xc8481effc60fa765ccf8286ba346233ed113b024"	: "BAT",
 	"0x59195ebd987bde65258547041e1baed5fbd18e8b"	: "DBET",
@@ -82,10 +86,11 @@ def tokenType(contract):
 	"0x1793bc201acbb64f3925ae5cb4355e78864a2597"	: "HALOC", #Halo Classic Legit
 	"0x5f2786097350e9d0a0cbba233774631991dc5e40"	: "EVED", #EVED
 	"0x0023bc712073f013fd810693a7c40da5002e9b84"	: "Dud", #TUTOTEST
-	"0xbc77c9ae443940b8ca147870063ee2213264d8b6"	: "WIZARD",
+	"0xbc77c9ae443940b8ca147870063ee2213264d8b6"	: "WIZARD", #WIZARD
 	"0xf6ad1612a655977ed1d0934aefa541f8660ee3a2"	:"UNKNOWN",
-	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	,
-	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2" 
+	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	, #FACTOM
+	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2" #FACTOM
+
 	}
 
 	x = str(contract)
@@ -110,27 +115,26 @@ def hotlist(hotlist):
 
 def MNPAYOUT(to_address):
 
-	myclient 	= 	pymongo.MongoClient("mongodb://localhost:27017/")
-	address 	= 	Web3.toChecksumAddress(to_address)
-	web3 		= 	search.connect_geth()
-	db 			= 	"halo-explorer-mainnet"
-	mydb 		= 	myclient[db]
-	myBlock 	= 	mydb["blocks"]
-	myCol 		= 	mydb["transactions"]
+	myclient						= pymongo.MongoClient("mongodb://localhost:27017/")
+	address 						= Web3.toChecksumAddress(to_address)
+	web3 							= search.connect_geth()
+	db 								= "halo-explorer-mainnet"
+	mydb 							= myclient[db]
+	myBlock 						= mydb["blocks"]
+	myCol 							= mydb["transactions"]
 	
 	
 	
 	for x in myCol.find({"to_address": to_address, "input": '0xc885bc58'}):
 
-		block_number = 	x["block_number"]
-
-		post_reward 	= 	Web3.fromWei(web3.eth.getBalance(address, block_number),'Ether')
-		block_number 	= 	int(block_number)
-		block_number 	= 	block_number - 1
-		pre_reward 		= 	Web3.fromWei(web3.eth.getBalance(address, block_number),'Ether')
-		reward 			= 	pre_reward - post_reward
-		result	= reward
-		#result	= "Calculation"
+		block_number 				= x["block_number"]
+		post_reward 				= Web3.fromWei(web3.eth.getBalance(address, block_number),'Ether')
+		block_number 				= int(block_number)
+		block_number 				= block_number - 1
+		pre_reward 					= Web3.fromWei(web3.eth.getBalance(address, block_number),'Ether')
+		reward 						= pre_reward - post_reward
+		result						= reward
+	
 
 		return result
 
@@ -140,9 +144,9 @@ def MNPAYOUT(to_address):
 
 def timestamp(stamp):
 			
-			time = 			stamp
-			dt = 			datetime.fromtimestamp(time // 1000000000)
-			s = 			dt.strftime('%Y-%m-%d %H:%M:%S')
+			time 					= stamp
+			dt 						= datetime.fromtimestamp(time // 1000000000)
+			s 						= dt.strftime('%Y-%m-%d %H:%M:%S')
 			
 			return s
 
@@ -154,30 +158,28 @@ def systemPing(receivedInput):
 
 	DESCRIPTOR = "System Ping"
 
-	value                                   = Web3.fromWei(receivedInput['value'], 'Ether')
+	value                           = Web3.fromWei(receivedInput['value'], 'Ether')
 	description                     = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
+	
+	result							= #Dict
 
-	result                                  ={
+	{
+
 	"descriptor"                    : DESCRIPTOR,
-	"hash"                                  : receivedInput['hash'],
-	"nonce"                                 : receivedInput['nonce'],
+	"hash"                          : receivedInput['hash'],
+	"nonce"                         : receivedInput['nonce'],
 	"block_hash"                    : receivedInput['block_hash'],
 	"block_number"                  : receivedInput['block_number'],
 	"transaction_index"             : receivedInput['transaction_index'],
 	"from_address"                  : receivedInput['from_address'],
 	"to_address"                    : receivedInput['to_address'],
-	"value"                                 : value,
-	"gas"                                   : receivedInput['gas'],
-	"gas_price"                             : receivedInput['gas_price'],
-	#"input"                                : receivedInput['input'],
+	"value"                         : value,
+	"gas"                           : receivedInput['gas'],
+	"gas_price"                     : receivedInput['gas_price'],
 	"block_timestamp"               : timestamp(receivedInput['block_timestamp']),
-	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
+	"description"					: description
 						
-	                                        }
+	}
 
 
 	return result
@@ -196,12 +198,9 @@ def interHalo(receivedInput):
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
-
 
 	result					={
+
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
 	"nonce"					: receivedInput['nonce'],
@@ -213,12 +212,10 @@ def interHalo(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
-							}
+
+	}
 
 	
 	return result
@@ -233,8 +230,6 @@ def Burn(receivedInput):
 	value					= Web3.fromWei(int(result[0]), 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
 
 
 
@@ -250,11 +245,8 @@ def Burn(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -267,11 +259,6 @@ def ContractDeploy(receivedInput):
 	DESCRIPTOR = "CONTRACT DEPLOY"
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
-
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -285,11 +272,9 @@ def ContractDeploy(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
+
 							}
 
 	
@@ -304,11 +289,6 @@ def SmartContract(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
-
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -322,11 +302,8 @@ def SmartContract(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -340,11 +317,6 @@ def payout(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
-
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -358,11 +330,8 @@ def payout(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -375,9 +344,6 @@ def CommitToSharedContract(receivedInput): #"0x726c4d6f": 	,
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])	
-
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -391,11 +357,8 @@ def CommitToSharedContract(receivedInput): #"0x726c4d6f": 	,
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -409,9 +372,7 @@ def noInfo(receivedInput):
 	description = f'Unknown At the Current Time'
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
+	
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -424,11 +385,9 @@ def noInfo(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
+
 							}
 
 	
@@ -442,8 +401,6 @@ def ERCDeposit(receivedInput):
 	description = "nil"
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -457,11 +414,9 @@ def ERCDeposit(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
+
 							}
 
 	
@@ -552,7 +507,6 @@ def masternodePayout(receivedInput):
 	try:
 		for x in myMN.find({ "timestamp" : checkHash }):
 			reward = x["reward"]
-			#reward = "DataBase"
 
 			description = f'Masternode {receivedInput["to_address"]} Payout'
 		
@@ -568,26 +522,18 @@ def masternodePayout(receivedInput):
 		"value"					: reward,
 		"gas" 					: receivedInput['gas'],
 		"gas_price"				: receivedInput['gas_price'],
-		#"input" 				: receivedInput['input'],
 		"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 		"description"			: description,
 		"reward"				: reward
-		#"known_from"			: from_address_known,	
-		#"known_to"				: to_address_known
 		}
 		
 
 		y = result
-		#y = json.dumps((result),sort_keys=True, indent=4, separators=(',', ': '))
-		#print(DESCRIPTOR)
+		
 		return y
 
 	except:
 		reward = MNPAYOUT(to_address)
-
-	
-		#to_address_known = hotlist(receivedInput["to_address"])
-		#from_address_known = hotlist(receivedInput["from_address"])
 
 		description = f'Masternode {receivedInput["to_address"]} Payout'
 		
@@ -603,18 +549,13 @@ def masternodePayout(receivedInput):
 		"value"					: reward,
 		"gas" 					: receivedInput['gas'],
 		"gas_price"				: receivedInput['gas_price'],
-		#"input" 				: receivedInput['input'],
 		"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 		"description"			: description,
 		"reward"				: reward
-		#"known_from"			: from_address_known,	
-		#"known_to"				: to_address_known
 		}
 		
 
 		y = result
-		#y = json.dumps((result),sort_keys=True, indent=4, separators=(',', ': '))
-		#print(DESCRIPTOR)
 		return y
 
 #---------------------------------------------------------------------------------------------------------------
@@ -640,11 +581,8 @@ def HaloWalletToDex(receivedInput): #0xd0e30db0
 	"value"                         : value,
 	"gas"                           : receivedInput['gas'],
 	"gas_price"                     : receivedInput['gas_price'],
-	#"input"                        : receivedInput['input'],
 	"block_timestamp"               : timestamp(receivedInput['block_timestamp']),
 	"description"                   : description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 	}
 
 	return result
@@ -660,14 +598,8 @@ def haloFromDexToWallet(receivedInput): #"0x2e1a7d4d"
 	DESCRIPTOR = "HaloDex --> Wallet"
 
 	scrape = parse(receivedInput["input"])
-	#TEST
-	#DESCRIPTOR = scrape
-	#TEST
 	scrape = int(scrape[0])
 	value      = str(Web3.fromWei(scrape, 'Ether'))
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
 
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 
@@ -683,11 +615,8 @@ def haloFromDexToWallet(receivedInput): #"0x2e1a7d4d"
 	"value"                         : value,
 	"gas"                           : receivedInput['gas'],
 	"gas_price"                     : receivedInput['gas_price'],
-	#"input"                        : receivedInput['input'],
 	"block_timestamp"               : timestamp(receivedInput['block_timestamp']),
 	"description"                   : description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 	}
 
 	return result
@@ -709,10 +638,6 @@ def masternodeSell(receivedInput): #0xd4444da6
 	shares_for_sale = Web3.fromWei(shares_for_sale, 'Ether')
 	asking_price = int(answer[3])
 	asking_price = Web3.fromWei(asking_price, 'Ether')
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-
-
 
 	result={
     "descriptor"                    : DESCRIPTOR,
@@ -726,11 +651,9 @@ def masternodeSell(receivedInput): #0xd4444da6
     "value"                         : value,
     "gas"                           : receivedInput['gas'],
     "gas_price"                     : receivedInput['gas_price'],
-    #"input"                        : receivedInput['input'],
     "block_timestamp"               : timestamp(receivedInput['block_timestamp']),
     "description"                   : description
-    #"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
+
     }
 
 	#"seller"				: receivedInput["from_address"],
@@ -758,8 +681,6 @@ def masternodeCreate(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -773,11 +694,8 @@ def masternodeCreate(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -791,9 +709,6 @@ def masternodeTerminate(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	#to_address_known = hotlist(receivedInput["to_address"])
-	#from_address_known = hotlist(receivedInput["from_address"])
-	
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -806,11 +721,8 @@ def masternodeTerminate(receivedInput):
 	"value"					: "Terminated",
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-	#"known_from"			: from_address_known,	
-	#"known_to"				: to_address_known
 							}
 
 	
@@ -826,8 +738,6 @@ def masternodeSuspend(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 	
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -841,11 +751,8 @@ def masternodeSuspend(receivedInput):
 	"value"					: "Suspended",
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -904,8 +811,6 @@ def dexOrderCancelled(receivedInput):
 
 	value					= "Cancelled Order"
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -919,11 +824,8 @@ def dexOrderCancelled(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -945,11 +847,8 @@ def ethOffNetwork(receivedInput): #"0xb36c2acc": 	ethOffNetwork
 	value 					= Web3.fromWei(value, 'ETHER')
 	description 			= "H-ETH sent to ETH Chain"
 	eth 					= data[34:74]
-
 	eth_address = 			"0x" + eth
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -962,12 +861,9 @@ def ethOffNetwork(receivedInput): #"0xb36c2acc": 	ethOffNetwork
 	"value"					: value,
 	"gas" 					: eth_address,
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description,
 	"external"				: "https://etherscan.io/address/{}".format(eth_address)
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -998,9 +894,7 @@ def ERCtoChain(receivedInput):
 	eth 					= data[34:74]
 
 	eth_address = 			"0x" + eth
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1013,12 +907,9 @@ def ERCtoChain(receivedInput):
 	"value"					: value,
 	"gas" 					: eth_address,
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description,
 	"external"				: "https://etherscan.io/address/{}".format(eth_address)
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1036,8 +927,6 @@ def ethTransferWallettoDex1(receivedInput): #"0x095ea7b3"
 	realvalue = int(contract[1])
 	value					= Web3.fromWei(realvalue, 'Ether')
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result={
 	"descriptor"			: DESCRIPTOR,
@@ -1051,23 +940,10 @@ def ethTransferWallettoDex1(receivedInput): #"0x095ea7b3"
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
-	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
-	
+	"description"			: description	
 	}
 
-	
-
-	#y = json.dumps((result),sort_keys=True, indent=4, separators=(',', ': '))
-	#print(DESCRIPTOR)
-	#print("P2P Transaction")
-	#print(result)
-	#return result
-	#COMPLETED
-	
 	return result
 #------------------------------------------------------------------------------------------
 
@@ -1082,9 +958,7 @@ def ethTransferWallettoDex2(receivedInput):
 	realvalue = int(contract[1])
 	value					= Web3.fromWei(realvalue, 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1097,11 +971,8 @@ def ethTransferWallettoDex2(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1120,8 +991,6 @@ def hethToEth(receivedInput): #0x9e281a98
 	realvalue = int(contract[1])
 	value					= Web3.fromWei(realvalue, 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1135,11 +1004,8 @@ def hethToEth(receivedInput): #0x9e281a98
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1152,8 +1018,6 @@ def dexPlaceOrder(receivedInput): #"0x0b927666": 	dexPlaceOrder,
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	value					= "Order Placed"
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1167,11 +1031,8 @@ def dexPlaceOrder(receivedInput): #"0x0b927666": 	dexPlaceOrder,
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1184,11 +1045,8 @@ def dexPlaceOrder(receivedInput): #"0x0b927666": 	dexPlaceOrder,
 def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	DESCRIPTOR = "Dex Order Filled "
 
-	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	value					= "Order Filled"
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1202,11 +1060,8 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 								}
 
 	
@@ -1221,8 +1076,6 @@ def gamesDeposit(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 	
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1236,11 +1089,8 @@ def gamesDeposit(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 							
 
@@ -1260,9 +1110,7 @@ def WrappedTokenTransfer(receivedInput):
 	amount = int(contract[1])
 	value					= Web3.fromWei(amount, 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1275,11 +1123,8 @@ def WrappedTokenTransfer(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1293,9 +1138,7 @@ def boughtMarketplace(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1308,11 +1151,8 @@ def boughtMarketplace(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1323,16 +1163,10 @@ def serviceFee(receivedInput):
 	
 
 	fee = parse(receivedInput["input"])
-	#TEST
-	#DESCRIPTOR = fee[3]
-	#TEST
 	fee = int(fee[3])
 	value = "Fee"
-	#value      = str(Web3.fromWei(fee, 'Ether'))
 	DESCRIPTOR = "SF"
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1346,11 +1180,8 @@ def serviceFee(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1367,9 +1198,7 @@ def bcwithdrawl(receivedInput):
 	value					= Web3.fromWei(value, 'Ether')
 
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1382,11 +1211,8 @@ def bcwithdrawl(receivedInput):
 	"value"					: value,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: to_address_known,	
-#	"known_to"				: to_address
 							}
 
 	
@@ -1401,9 +1227,7 @@ def nodeActivate(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1416,11 +1240,8 @@ def nodeActivate(receivedInput):
 	"value"					: "Activated",
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1432,9 +1253,7 @@ def contractDeployment(receivedInput):
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
-	
+
 	result					={
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
@@ -1447,11 +1266,8 @@ def contractDeployment(receivedInput):
 	"value"					: "Deploment",
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"input" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 							}
 
 	
@@ -1523,29 +1339,3 @@ Inputs	= {
 
 
 }
-#db.ethereum.find({ "to_address" : { $ne: "0xfc443adc3ccaabc88ce53c5010b6d33eac6b7f7f" }}).sort({$natural:-1}).limit(1).pretty()
-#0x44811585
-#0xdf6c39fb
-#0x7c325d0e
-#0xcbb0f029
-#0x749726fe
-#0x00e77545 BF WITHDRAW
-#0x9f8a89ba Node Activate
-#0x60606040
-#"_id" : ObjectId("5d06d1b3865f9d31d4b41098"),
-#	"hash" : "0x690f43fbdd7dc40a1916eb7e2449fd81a701478131a8dc236f3c6b8673cec653",
-#	"nonce" : 358,
-#	"block_hash" : "0x9d9fcbdd9fcf82b61fd29b039018d594c274e408c452127dee57fd901b765269",
-#	"block_number" : 400,
-#	"transaction_index" : 0,
-#	"from_address" : "0x6ee7d5471a483d8a72e6f32ecf3d70fdf0a7fe51",
-#	"to_address" : "",
-#	"value" : 0,
-#	"gas" : 90000,
-#	"gas_price" : 0,
-#	"input" : "0x686270696e67",
-#	"block_timestamp" : NumberLong("1527028381468412211")
-#}
-
-
-
