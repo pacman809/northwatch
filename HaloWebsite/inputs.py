@@ -89,7 +89,8 @@ def tokenType(contract):
 	"0xbc77c9ae443940b8ca147870063ee2213264d8b6"	: "WIZARD", #WIZARD
 	"0xf6ad1612a655977ed1d0934aefa541f8660ee3a2"	:"UNKNOWN",
 	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	, #FACTOM
-	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2" #FACTOM
+	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2",
+	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "TOKEN" #
 
 	}
 
