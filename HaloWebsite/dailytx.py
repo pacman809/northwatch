@@ -2,18 +2,16 @@ from web3 import Web3
 from search import connect_geth
 import pymongo
 global starttime
-
+from data import database
 
 def dailyTransactions():
         global starttime
         
         web3 = connect_geth()
 
-        db              =       "halo-explorer-mainnet" # CONSOLIDATE THIS TO NEW FILE
-        myclient        =       pymongo.MongoClient("mongodb://localhost:27017/")
-        mydb            =       myclient[db]
-        myCol           =       mydb["blocks"]
-        myCol2          =       mydb["transactions"]
+        
+        myCol           =       database()["blocks"]
+        myCol2          =       database()["transactions"]
         count = 0
 
 

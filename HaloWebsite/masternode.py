@@ -18,13 +18,13 @@ def masternode(personal_address):
 			shares = Web3.fromWei(shares, 'ETHER')
 			totals = Web3.fromWei(total_shares, 'ETHER')
 
-			steak = {
+			masternode_shares = {
 			"tier" 		:			int(x["TIER"]),
 			"shares" 	:		 	int(shares),
 			"masternode": 			x["ADDRESS"],
 			}
 
-			results.append(steak)
+			results.append(masternode_shares)
 
 			tota = {
 			"total" 	: totals,
