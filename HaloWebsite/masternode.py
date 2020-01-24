@@ -5,7 +5,7 @@ import requests
 
 def masternode(personal_address):
 	results = []
-	total = float(0)
+	total_shares = float(0)
 
 	api_url = requests.get("https://mn-api.haloplatform.tech/owned/{}".format(personal_address))
 	data_results = api_url.json()
@@ -13,10 +13,10 @@ def masternode(personal_address):
 	count = len(data_results["result"])
 	if count != 0:
 		for x in data_results["result"]:
-			beef = float('%.08f' % x["SHARES"]) 
-			total = beef + total
-			shares = Web3.fromWei(beef, 'ETHER')
-			totals = Web3.fromWei(total, 'ETHER')
+			shares = float('%.08f' % x["SHARES"]) 
+			total_shares = shares + total_shares
+			shares = Web3.fromWei(shares, 'ETHER')
+			totals = Web3.fromWei(total_shares, 'ETHER')
 
 			steak = {
 			"tier" 		:			int(x["TIER"]),

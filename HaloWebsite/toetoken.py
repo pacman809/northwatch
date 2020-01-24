@@ -25,7 +25,7 @@ def balanceInfo(personal_address):
         balance = web3.fromWei(balance,"ether")
 
         if symbol == "BTC"  or symbol == "FCT" and balance != 0 :
-            balance = balance * 100000000000
+            balance = balance * 10000000000
             balance = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
             results.update( {symbol : balance} )
         
