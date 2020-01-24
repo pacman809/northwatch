@@ -90,7 +90,8 @@ def tokenType(contract):
 	"0xf6ad1612a655977ed1d0934aefa541f8660ee3a2"	:"UNKNOWN",
 	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	, #FACTOM
 	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2",
-	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "TOKEN" #
+	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "TOKEN", #
+	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "F3"
 
 	}
 
@@ -1285,7 +1286,8 @@ Inputs	= {
 	"0x095ea7b3": 	ethTransferWallettoDex1,
 	"0x338b5dea":   ethTransferWallettoDex2,
 	"0x0b927666": 	dexPlaceOrder,
-	"0x0c8e8326": 	ERCtoChain,
+	"0x0c8e8326":	noInfo,
+	#"0x0c8e8326": 	ERCtoChain,
 	"0x13a30791": 	noInfo,
 	"0x19f7ae27": 	noInfo,
 	#"0x2a95599f": 	MarketplaceCancelOrder,
