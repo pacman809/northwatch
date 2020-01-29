@@ -1,6 +1,11 @@
 import pymongo
 from datetime import datetime
 
+#--------------------CONFIG--------------------------------#
+GethUrl = "http://192.168.1.103:8545"
+
+
+
 
 def database():
 	db 			= "halo-explorer-mainnet"
