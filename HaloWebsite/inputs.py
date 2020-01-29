@@ -63,7 +63,7 @@ known_address_contract={
 def tokenType(contract):
 
 	tokens={
-
+	"0x0"	: "HALO",
 	"0xd314d564c36c1b9fbbf6b440122f84da9a551029"	: "ETH",
 	"0xc8481effc60fa765ccf8286ba346233ed113b024"	: "BAT",
 	"0x59195ebd987bde65258547041e1baed5fbd18e8b"	: "DBET",
@@ -764,18 +764,18 @@ def masternodeSuspend(receivedInput):
 #DEX
 
 def dexPlaceOrder(receivedInput):
-	DESCRIPTOR = "Dex Trade Order"
+	DESCRIPTOR = "Dex Order Placed"
 
 	data = receivedInput["input"]
 	answer = parse(data)
 	orderNumber = str(answer[4])
-	Wanting =  dectohex(answer[0])
-	Wanting = contractType(Wanting)
+	Wanting =  tokenType(dectohex(answer[0]))
+	#Wanting = contractType(Wanting)
 	shares_wanted = int(answer[1])
 	shares_wanted2 = str(Web3.fromWei(shares_wanted, 'Ether'))
 	giveCoin = int(answer[3])
 	giveCoin2 = str(Web3.fromWei(giveCoin, 'Ether'))
-	Giving = contractType(answer[2])
+	Giving = tokenType(dectohex(answer[2]))
 	#price =float(shares_wanted2) / float(giveCoin2)
 #	to_address_known = hotlist(receivedInput["to_address"])
 #	from_address_known = hotlist(receivedInput["from_address"])
@@ -1012,7 +1012,7 @@ def hethToEth(receivedInput): #0x9e281a98
 	return result
 
 #------------------------------------------------------------------------------------------------	
-def dexPlaceOrder(receivedInput): #"0x0b927666": 	dexPlaceOrder,
+def dexPlaceOrder1(receivedInput): #"0x0b927666": 	dexPlaceOrder,
 	DESCRIPTOR = "Dex Order Placed "
 
 	value					= Web3.fromWei(receivedInput['value'], 'Ether')
@@ -1045,8 +1045,18 @@ def dexPlaceOrder(receivedInput): #"0x0b927666": 	dexPlaceOrder,
 def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	DESCRIPTOR = "Dex Order Filled "
 
+	inputs = parse(receivedInput["input"])
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	value					= "Order Filled"
+	giveCoin = tokenType(dectohex(inputs[1]))
+	values = int(inputs[11])
+	weis	= dectohex(inputs[5])
+	giveValue = Web3.fromWei(values, 'ETHER')
+	receivedCoin = tokenType(dectohex(inputs[3]))
+	value2 = int(inputs[4])
+	receivedValue = Web3.fromWei(value2 , 'ETHER')
+	#wantCoin = tokenType(dectohex(inputs[]))
+	tradePartner = dectohex(inputs[7])
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1061,7 +1071,8 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
-	"description"			: description
+	"description"			: description,
+	"input" 				: {"Traded" : tradePartner , "giveCoin" : giveCoin, "giveCoinAmount" : giveValue , "receivedCoin" : receivedCoin, "receivedValue" : receivedValue }
 								}
 
 	

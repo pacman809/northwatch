@@ -96,7 +96,7 @@ Hash <a href="https://www.haloexplorer.com/tx/{{ history.hash }} " style=" color
   
   <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
 To: <a href="https://www.haloexplorer.com/balance/{{ history.to_address }} " style=" color: #7F91B9">{{ history.to_address }}</a></td>
-  <td>{{ history.value }}</td>
+  <td>{{ history.value }}{{ history.input }}</td>
   
    {% endif %} 
 
@@ -109,7 +109,7 @@ To: <a href="https://www.haloexplorer.com/balance/{{ history.to_address }} " sty
 Hash <a href="https://www.haloexplorer.com/tx/{{ history.hash }} " style=" color: #7F91B9">{{ history.hash | truncate(25,true,' .....') }}</a></td>
   <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
 To: <a href="https://www.haloexplorer.com/balance/{{ history.to_address }} " style=" color: #7F91B9">{{ history.to_address }}</a></td>
-  <td>{{ history.value }}</td>
+  <td>{{ history.value}}</td>
   
 
     {% endif %}
