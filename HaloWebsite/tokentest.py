@@ -24,7 +24,7 @@ def balanceInfo(personal_address):
         balance = contract.functions.balanceOf(account_checksum).call()
         
 
-        if symbol == "BTC" or "FCT" and balance != 0 :
+        if symbol == "BTC" or "FCT" and balance != 0:
             balance = balance * 100000000000
             balance = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
             results.update( {symbol : balance} )

@@ -1,21 +1,17 @@
 import pymongo
 import inputs
 from web3 import Web3
-import search
+from data import database, connect_geth
 
 def getAccountHistory(user_address):
 
 	display					= []
 	transactionCount 		= []
 
-	db 						= "halo-explorer-mainnet"
-	myclient 				= pymongo.MongoClient("mongodb://localhost:27017/")
-	mydb 					= myclient[db]
-	myCol 					= mydb["transactions"]
+	myCol 					= database()["transactions"]
 
 	user_address_Checksum 	= Web3.toChecksumAddress(user_address)
-	web3 					= search.connect_geth()
-	transactionCount 		= web3.eth.getTransactionCount(user_address_Checksum)
+	transactionCount 		= connect_geth().eth.getTransactionCount(user_address_Checksum)
 	userEntry 				= normalized_address = '0x{}'.format(user_address[2:].lstrip('0'))
 	userEntry 				= user_address.lower()
 
