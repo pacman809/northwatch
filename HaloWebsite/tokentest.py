@@ -1,6 +1,5 @@
 import json
 from web3 import Web3
-import json
 import requests
 import data
 
@@ -20,7 +19,6 @@ def balanceInfo(personal_address):
 
     for i in contract_address:
         address = Web3.toChecksumAddress(i)
-        #user_clean = Web3.toChecksumAddress(personal_address)
         contract = web3.eth.contract(address=address, abi=abi)
         symbol = contract.functions.symbol().call()
         balance = contract.functions.balanceOf(account_checksum).call()
