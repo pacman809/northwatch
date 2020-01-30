@@ -3,14 +3,20 @@ from datetime import datetime
 from web3 import Web3
 #--------------------CONFIG--------------------------------#
 
+#RPC NODE URL
 GethUrl = "http://192.168.1.103:8545"
+#
+
+#DATABASE NAME
+DataBaseName 	= "halo-explorer-mainnet"
+#DataBaseName 	= "halo-explorer-testnet"
+#
 
 
-
-
+#---------------------END CONFIG----------------------------#
 def database():
 	
-	db 			= "halo-explorer-mainnet"
+	db 			= DataBaseName
 	myclient 	= pymongo.MongoClient("mongodb://localhost:27017/")
 	mydb 		= myclient[db]
 
