@@ -1,8 +1,7 @@
 from web3 import Web3
-from search import connect_geth
 import pymongo
 global starttime
-from data import database
+from data import database, connect_geth
 
 def dailyTransactions():
         global starttime
