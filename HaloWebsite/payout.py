@@ -24,7 +24,7 @@ def payout():
 				if bob == "0xdf6c39fb":
 					list.append(x["block_timestamp"])
 					payout = list[0]
-					payout = data.timestamp(payout)
+					payout = timestamp(payout)
 
 			return payout
 
