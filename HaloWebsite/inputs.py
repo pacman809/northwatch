@@ -91,7 +91,8 @@ def tokenType(contract):
 	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	, #FACTOM
 	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2",
 	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "HXRO", #
-	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "F3"
+	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "FCT",
+	"0x4734e87fbd52516ff729345bbf910557f630477c"	: "P2"
 
 	}
 
@@ -638,6 +639,8 @@ def masternodeSell(receivedInput): #0xd4444da6
 	shares_for_sale = Web3.fromWei(shares_for_sale, 'Ether')
 	asking_price = int(answer[3])
 	asking_price = Web3.fromWei(asking_price, 'Ether')
+	ratio = "{:.2f}".format(shares_for_sale/asking_price)
+	#{:.2f}".format(5)
 
 	result={
     "descriptor"                    : DESCRIPTOR,
@@ -648,12 +651,10 @@ def masternodeSell(receivedInput): #0xd4444da6
     "transaction_index"             : receivedInput['transaction_index'],
     "from_address"                  : receivedInput['from_address'],
     "to_address"                    : receivedInput['to_address'],
-    "value"                         : value,
+    "value"                         : f' {shares_for_sale} For {asking_price} / {ratio}',
     "gas"                           : receivedInput['gas'],
     "gas_price"                     : receivedInput['gas_price'],
-    "block_timestamp"               : timestamp(receivedInput['block_timestamp']),
-    "description"                   : description
-
+    "block_timestamp"               : timestamp(receivedInput['block_timestamp'])
     }
 
 	#"seller"				: receivedInput["from_address"],
@@ -665,7 +666,7 @@ def masternodeSell(receivedInput): #0xd4444da6
 	
 
 
-	y = json.dumps(result)
+	#y = json.dumps(result)
 	#print(DESCRIPTOR)
 	return result
 
@@ -1057,6 +1058,7 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	receivedValue = Web3.fromWei(value2 , 'ETHER')
 	#wantCoin = tokenType(dectohex(inputs[]))
 	tradePartner = dectohex(inputs[7])
+	price = giveValue/receivedValue
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1072,7 +1074,8 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	"gas_price"				: receivedInput['gas_price'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description,
-	"input" 				: {"Traded" : tradePartner , "giveCoin" : giveCoin, "giveCoinAmount" : giveValue , "receivedCoin" : receivedCoin, "receivedValue" : receivedValue }
+	"input"					: f' {giveValue} {giveCoin} For {receivedValue} {receivedCoin} Buyer/Seller = {tradePartner} Price = {price}',
+	#"input" 				: {"Traded" : tradePartner , "giveCoin" : giveCoin, "giveCoinAmount" : giveValue , "receivedCoin" : receivedCoin, "receivedValue" : receivedValue }
 								}
 
 	
@@ -1298,7 +1301,7 @@ Inputs	= {
 	"0x338b5dea":   ethTransferWallettoDex2,
 	"0x0b927666": 	dexPlaceOrder,
 	"0x0c8e8326":	noInfo,
-	#"0x0c8e8326": 	ERCtoChain,
+	"0x0c8e8326": 	ERCtoChain,
 	"0x13a30791": 	noInfo,
 	"0x19f7ae27": 	noInfo,
 	#"0x2a95599f": 	MarketplaceCancelOrder,
@@ -1339,7 +1342,7 @@ Inputs	= {
 	"0xcbb0f029": 	boughtMarketplace,
 	"0xceeb7066": 	noInfo,
 	"0xd0e30db0": 	HaloWalletToDex,
-	#"0xd4444da6": 	masternodeSell,
+	"0xd4444da6": 	masternodeSell,
 	"0xdf6c39fb": 	payout,
 	"0xea115fdb": 	DepositEth,
 	"0xf612f5ce": 	noInfo,

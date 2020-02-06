@@ -79,6 +79,7 @@ def main():
 	history = lastTx()
 	lastPayout = payout()
 	return render_template('index.html', history= history, lastPayout= lastPayout)
+	#return render_template('maint.html')
 
 	
 #---------------------------------------------------------------------------------------------------------------------------
