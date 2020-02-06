@@ -356,9 +356,9 @@ def balanceInfo(personal_address):
         balance = web3.fromWei(balance,"ether")
 
         if symbol == "BTC" and balance != 0 :
-            balance = balance * 10000000000
+            btc_balance = balance * 10000000000
             balance = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
-            results.update( {symbol : balance} )
+            results.update( {symbol : btc_balance} )
         
         
         if balance != 0:

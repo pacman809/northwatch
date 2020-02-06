@@ -544,8 +544,8 @@ def HaloWalletToDex(receivedInput): #0xd0e30db0
 	value                                   = Web3.fromWei(receivedInput['value'], 'Ether')
 
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
-	to_address_known = hotlist(receivedInput["to_address"])
-	from_address_known = hotlist(receivedInput["from_address"])
+	#to_address_known = hotlist(receivedInput["to_address"])
+	#from_address_known = hotlist(receivedInput["from_address"])
 
 	result={
 	"descriptor"                    : DESCRIPTOR,
@@ -756,8 +756,8 @@ def dexPlaceOrder(receivedInput):
 	"value"					: Web3.fromWei(receivedInput['value'], 'Ether'),
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
-	"input"					: {"orderNumber": answer[4], "amountWanted": shares_wanted2, "wantCoin": Wanting,  "amountGiving": giveCoin2, "giveCoin": Giving }
+	"block_timestamp"		: timestamp(receivedInput['block_timestamp'])
+	#"input"					: {"orderNumber": answer[4], "amountWanted": shares_wanted2, "wantCoin": Wanting,  "amountGiving": giveCoin2, "giveCoin": Giving }
 	}
 
 	
@@ -879,13 +879,19 @@ def ERCtoChain(receivedInput):
 #ETH
 
 def ethTransferWallettoDex1(receivedInput): #"0x095ea7b3"
-	DESCRIPTOR = ("Token --> HaloDex SC")
 	
 	inputs = receivedInput['input']
 	contract = parse(inputs)
 	realvalue = int(contract[1])
+	token = tokenType(receivedInput["to_address"])
+	DESCRIPTOR = f'{token} --> HaloDex SC'
+	
 	value					= Web3.fromWei(realvalue, 'Ether')
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+
+	if token == "FCT" :
+            balance = value * 10000000000
+            value = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
 
 	result={
 	"descriptor"			: DESCRIPTOR,
@@ -917,6 +923,11 @@ def ethTransferWallettoDex2(receivedInput):
 	realvalue = int(contract[1])
 	value					= Web3.fromWei(realvalue, 'Ether')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+
+	if token == "FCT" :
+            balance = value * 10000000000
+            value = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
+            
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -1030,8 +1041,8 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
-	"description"			: description,
-	"input"					: f' {giveValue} {giveCoin} For {receivedValue} {receivedCoin} Buyer/Seller = {tradePartner} Price = {price}',
+	"description"			: description
+	#"input"					: f' {giveValue} {giveCoin} For {receivedValue} {receivedCoin} Buyer/Seller = {tradePartner} Price = {price}',
 							}
 
 	
