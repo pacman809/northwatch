@@ -1,17 +1,13 @@
 from flask import Flask, request, render_template, flash, redirect 
-from blockStats import blockResults
 from dailytx import dailyTransactions
 from web3 import Web3
-from getType import GetType
-from getType import timestamp
-from TransStats import TransResults
 from heth import solvency
 from explorerdryrun import getAccountHistory
 from latesttx import lastTx
 import os
 from flask import send_from_directory
 from powerball import powerball
-from data import performance, masternode, payout, query, balanceInfo
+from data import performance, masternode, payout, query, balanceInfo, blockResults, getType, timestamp, transResults, rawParse
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -108,7 +104,7 @@ def block(id):
 	transactions = result
 	current = performance()
 	data = result["input"]
-	inputData = GetType(data)	
+	inputData = getType(data)	
 
 	if result is not  None:
 		confirmations = current["BLOCKNUMBER"] - result["number"]
@@ -164,9 +160,9 @@ def balance(id):
 
 def transResolve(id):
 
-	
-	results = TransResults(id)
-	return render_template('transaction.html', results= results)
+	results = transResults(id)
+	parse 	= rawParse(results["input"])
+	return render_template('transaction.html', results= results, parse= parse)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 

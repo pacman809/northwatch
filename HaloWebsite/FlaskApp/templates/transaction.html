@@ -26,6 +26,7 @@
 {%  include 'header.html'  %}
 <!-- HEADER -ENDS -->
 
+<h1 align="center" style="font-size: 2vw" id="address">{{ results.hash }}</h1>
 
 <table align= center style="table-layout: fixed; width:90%">
    
@@ -87,7 +88,10 @@
       <td>{{ results.input }}</td>
     </tr>
 
-
+    <tr>
+      <td>Parsed Input</td>
+      <td>{{ parse }}</td>
+    </tr>
   </table>
 
 
