@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, flash, redirect 
-from performance import performance
 from blockStats import blockResults
 from dailytx import dailyTransactions
 from toetoken import balanceInfo
@@ -18,6 +17,7 @@ app.config["DEBUG"] = True
 import os
 from flask import send_from_directory
 from powerball import powerball
+from data import performance
 #--------------------------------------------------------------------------------------------------------------------------
 
 
