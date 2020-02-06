@@ -1,23 +1,20 @@
 from flask import Flask, request, render_template, flash, redirect 
 from blockStats import blockResults
 from dailytx import dailyTransactions
-from toetoken import balanceInfo
 from web3 import Web3
 from getType import GetType
 from getType import timestamp
 from TransStats import TransResults
 from heth import solvency
 from explorerdryrun import getAccountHistory
-from masternode import masternode
 from latesttx import lastTx
-from searchQuery import Query
-from payout import payout
-app = Flask(__name__)
-app.config["DEBUG"] = True
 import os
 from flask import send_from_directory
 from powerball import powerball
-from data import performance
+from data import performance, masternode, payout, query, balanceInfo
+
+app = Flask(__name__)
+app.config["DEBUG"] = True
 #--------------------------------------------------------------------------------------------------------------------------
 
 
@@ -133,7 +130,7 @@ def process():
 
 
 		search = request.form['search']
-		searchUrl = Query(search)
+		searchUrl = query(search)
 		try:
 			return redirect(searchUrl)
 		except Exception as e:

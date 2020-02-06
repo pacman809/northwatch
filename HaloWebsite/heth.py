@@ -1,6 +1,6 @@
 
 from web3 import Web3
-from search import connect_geth
+from data import connect_geth
 import json
 import requests 
 from datetime import datetime
