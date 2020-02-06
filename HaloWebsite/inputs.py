@@ -1,11 +1,6 @@
 
 from web3 import Web3
-import json as simplejson
-from datetime import datetime
-import pymongo
-from web3 import Web3
-import search
-from datetime import datetime
+from data import connect_geth, timestamp, database
 
 #------------------------------------------------------------------------------------------------------------
 #GENERAL TRANSACTION
@@ -118,11 +113,9 @@ def hotlist(hotlist):
 
 def MNPAYOUT(to_address):
 
-	myclient						= pymongo.MongoClient("mongodb://localhost:27017/")
 	address 						= Web3.toChecksumAddress(to_address)
-	web3 							= search.connect_geth()
-	db 								= "halo-explorer-mainnet"
-	mydb 							= myclient[db]
+	web3 							= connect_geth()
+	mydb 							= database()
 	myBlock 						= mydb["blocks"]
 	myCol 							= mydb["transactions"]
 	
@@ -140,18 +133,6 @@ def MNPAYOUT(to_address):
 	
 
 		return result
-
-
-#-----------------------------------------------------------------------------------------------------------
-
-
-def timestamp(stamp):
-			
-			time 					= stamp
-			dt 						= datetime.fromtimestamp(time // 1000000000)
-			s 						= dt.strftime('%Y-%m-%d %H:%M:%S')
-			
-			return s
 
 
 #-----------------------------------------------------------------------------------------------------------
@@ -429,9 +410,7 @@ def ERCDeposit(receivedInput):
 
 def DepositEth(receivedInput):
 
-	myclient 	= 	pymongo.MongoClient("mongodb://localhost:27017/")
-	db 			= 	"halo-explorer-mainnet"
-	mydb 		= 	myclient[db]
+	mydb 		= 	database()
 	myETH		= 	mydb["ethereum"]
 
 
@@ -496,9 +475,7 @@ def DepositEth(receivedInput):
 
 def masternodePayout(receivedInput):
 
-	myclient 	= 	pymongo.MongoClient("mongodb://localhost:27017/")
-	db 			= 	"halo-explorer-mainnet"
-	mydb 		= 	myclient[db]
+	mydb 		= 	database()
 	myMN		= 	mydb["masternodes"]
 
 	DESCRIPTOR = "Claimed MN Reward"
@@ -640,8 +617,7 @@ def masternodeSell(receivedInput): #0xd4444da6
 	asking_price = int(answer[3])
 	asking_price = Web3.fromWei(asking_price, 'Ether')
 	ratio = "{:.2f}".format(shares_for_sale/asking_price)
-	#{:.2f}".format(5)
-
+	
 	result={
     "descriptor"                    : DESCRIPTOR,
     "hash"                          : receivedInput['hash'],
@@ -657,17 +633,6 @@ def masternodeSell(receivedInput): #0xd4444da6
     "block_timestamp"               : timestamp(receivedInput['block_timestamp'])
     }
 
-	#"seller"				: receivedInput["from_address"],
-	#"shares_for_sale"		: str(shares_for_sale),
-	#"asking_price"			: str(asking_price),
-	#"masternode"			: masternode
-	#"input"					: {"masternode": masternode, "shares_for_sale": str(shares_for_sale), "asking_price": str(asking_price), "seller": receivedInput["from_address"]}
-	
-	
-
-
-	#y = json.dumps(result)
-	#print(DESCRIPTOR)
 	return result
 
 	#COMPLETED
@@ -771,15 +736,12 @@ def dexPlaceOrder(receivedInput):
 	answer = parse(data)
 	orderNumber = str(answer[4])
 	Wanting =  tokenType(dectohex(answer[0]))
-	#Wanting = contractType(Wanting)
 	shares_wanted = int(answer[1])
 	shares_wanted2 = str(Web3.fromWei(shares_wanted, 'Ether'))
 	giveCoin = int(answer[3])
 	giveCoin2 = str(Web3.fromWei(giveCoin, 'Ether'))
 	Giving = tokenType(dectohex(answer[2]))
-	#price =float(shares_wanted2) / float(giveCoin2)
-#	to_address_known = hotlist(receivedInput["to_address"])
-#	from_address_known = hotlist(receivedInput["from_address"])
+	
 	
 
 	result={
@@ -794,11 +756,8 @@ def dexPlaceOrder(receivedInput):
 	"value"					: Web3.fromWei(receivedInput['value'], 'Ether'),
 	"gas" 					: receivedInput['gas'],
 	"gas_price"				: receivedInput['gas_price'],
-	#"inputs" 				: receivedInput['input'],
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"input"					: {"orderNumber": answer[4], "amountWanted": shares_wanted2, "wantCoin": Wanting,  "amountGiving": giveCoin2, "giveCoin": Giving }
-#	"known_from"			: from_address_known,	
-#	"known_to"				: to_address_known
 	}
 
 	
@@ -878,7 +837,6 @@ def ERCtoChain(receivedInput):
 
 	inputs = receivedInput['input']
 	contract = receivedInput["to_address"]
-	#token2 = dectohex(contract[0])
 	token = tokenType(contract)
 	
 	DESCRIPTOR = (f'{token} --> ETH Network')
@@ -1056,7 +1014,6 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	receivedCoin = tokenType(dectohex(inputs[3]))
 	value2 = int(inputs[4])
 	receivedValue = Web3.fromWei(value2 , 'ETHER')
-	#wantCoin = tokenType(dectohex(inputs[]))
 	tradePartner = dectohex(inputs[7])
 	price = giveValue/receivedValue
 
@@ -1075,8 +1032,7 @@ def dexFilledOrder(receivedInput): #"0x31663639": 	dexFilledOrder,
 	"block_timestamp"		: timestamp(receivedInput['block_timestamp']),
 	"description"			: description,
 	"input"					: f' {giveValue} {giveCoin} For {receivedValue} {receivedCoin} Buyer/Seller = {tradePartner} Price = {price}',
-	#"input" 				: {"Traded" : tradePartner , "giveCoin" : giveCoin, "giveCoinAmount" : giveValue , "receivedCoin" : receivedCoin, "receivedValue" : receivedValue }
-								}
+							}
 
 	
 	return result
