@@ -62,7 +62,7 @@ def tokenType(contract):
 	"0xd314d564c36c1b9fbbf6b440122f84da9a551029"	: "ETH",
 	"0xc8481effc60fa765ccf8286ba346233ed113b024"	: "BAT",
 	"0x59195ebd987bde65258547041e1baed5fbd18e8b"	: "DBET",
-	"0xb8648f065205b9c31055653d668723f4b840e4c0"	: "BTC",
+	"0xb8648f065205b9c31055653d668723f4b840e4c0"	: "BTC", #8 Decimals
 	"0x14d01e64f0573925e28d69dc3846b2f0986ab8b8"	: "HST",
 	"0x280750ccb7554faec2079e8d8719515d6decdc84"	: "VET",
 	"0x0792fe820e7f65da788ac002ce88c74816b59142"	: "OMG",
@@ -86,7 +86,7 @@ def tokenType(contract):
 	"0xddb500dbe30c91398a2ade12234d4075aabea650"	: "XXX"	, #FACTOM
 	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2",
 	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "HXRO", #
-	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "FCT",
+	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "FCT", #8 decimals
 	"0x4734e87fbd52516ff729345bbf910557f630477c"	: "P2"
 
 	}
@@ -177,7 +177,11 @@ def interHalo(receivedInput):
 	
 	DESCRIPTOR = "Interhalo Transaction"
 
-	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	
 
@@ -324,7 +328,9 @@ def CommitToSharedContract(receivedInput): #"0x726c4d6f": 	,
 	
 	DESCRIPTOR = "Commit To MN Contract"
 
-	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 
 	result					={
@@ -353,7 +359,9 @@ def noInfo(receivedInput):
 	DESCRIPTOR = "PLEASE REPORT BLOCK NUMBER AND A BREIF SUMMARY OF WHAT YOU THINK THIS IS"
 	description = f'Unknown At the Current Time'
 
-	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 	
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -382,7 +390,9 @@ def ERCDeposit(receivedInput):
 	DESCRIPTOR = "ERC20 Deposited"
 	description = "nil"
 
-	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 
 	result					={
 	"descriptor"			: DESCRIPTOR,
@@ -420,7 +430,9 @@ def DepositEth(receivedInput):
 	try:
 		for x in myETH.find({ "block_timestamp" : timestampCheck }):
 			x['value'] = int(x['value'])
-			value			= Web3.fromWei(x['value'], 'Ether')
+			#value			= Web3.fromWei(x['value'], 'Ether')
+			value 					= x['value'] / 1000000000000000000
+			value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 			description 	= f'Databased ETH Deposit'
 		
 			result={
@@ -446,7 +458,9 @@ def DepositEth(receivedInput):
 
 	except:
 			receivedInput['value'] = int(x['value'])
-			value			= Web3.fromWei(x['value'], 'Ether')
+			#value			= Web3.fromWei(x['value'], 'Ether')
+			value 					= x['value'] / 1000000000000000000
+			value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 			description 	= f'Calculated ETH Deposit'
 		
 			result={
@@ -541,7 +555,9 @@ def masternodePayout(receivedInput):
 def HaloWalletToDex(receivedInput): #0xd0e30db0
 
 	DESCRIPTOR = "Wallet --> HaloDex"
-	value                                   = Web3.fromWei(receivedInput['value'], 'Ether')
+	#value                                   = Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 	#to_address_known = hotlist(receivedInput["to_address"])
@@ -577,7 +593,9 @@ def haloFromDexToWallet(receivedInput): #"0x2e1a7d4d"
 
 	scrape = parse(receivedInput["input"])
 	scrape = int(scrape[0])
-	value      = str(Web3.fromWei(scrape, 'Ether'))
+	#value      = str(Web3.fromWei(scrape, 'Ether'))
+	value 					= scrape / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 
 	description = f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 
@@ -645,7 +663,10 @@ def masternodeCreate(receivedInput):
 	tier = tier[73]
 	DESCRIPTOR = f'Masternode Created Tier {tier}'
 
-	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
 	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
 
 	result					={
@@ -804,7 +825,8 @@ def ethOffNetwork(receivedInput): #"0xb36c2acc": 	ethOffNetwork
 
 
 	value					= int(answer[1])
-	value 					= Web3.fromWei(value, 'ETHER')
+	value 					= value / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 	description 			= "H-ETH sent to ETH Chain"
 	eth 					= data[34:74]
 	eth_address = 			"0x" + eth

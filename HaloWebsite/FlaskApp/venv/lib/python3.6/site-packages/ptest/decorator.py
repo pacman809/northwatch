@@ -1,0 +1,370 @@
+import inspect
+import os
+import re
+from urllib.parse import urljoin, unquote
+from urllib.request import pathname2url
+
+from typing import Union, List, Tuple, Type, Dict, Callable, Iterable, Any
+
+from .enumeration import PDecoratorType, TestClassRunMode
+from .util import get_parameters_count
+
+
+def TestClass(enabled: bool = True, run_mode: Union[str, TestClassRunMode] = "singleline", run_group: str = None, description: str = "",
+              **custom_args):
+    """
+        The TestClass decorator, it is used to mark a class as TestClass.
+
+    :param enabled: enable or disable this test class.
+    :param run_mode: the run mode of all the test cases in this test class. If set to "parallel", all the test cases can be run by multiple threads.
+        If set to "singleline", all the test cases will be only run by one thread.
+    :param run_group: the run group of this test class. If run group is specified, all the test classes in the same run group will be run one by one.
+        If not, this test class will be belong to it own run group.
+    :param description: the description of this test class.
+    :param custom_args: the custom arguments of this test class.
+    """
+
+    def tracer(cls):
+        cls.__pd_type__ = PDecoratorType.TestClass
+        cls.__enabled__ = enabled
+        if isinstance(run_mode, str) and (run_mode.lower() in [TestClassRunMode.SingleLine.value, TestClassRunMode.Parallel.value]):
+            cls.__run_mode__ = TestClassRunMode(run_mode.lower())
+        elif isinstance(run_mode, TestClassRunMode):
+            cls.__run_mode__ = run_mode
+        else:
+            raise ValueError("Run mode <%s> is not supported. Please use <%s> or <%s>." % (
+                run_mode, TestClassRunMode.Parallel.value, TestClassRunMode.SingleLine.value))
+        cls.__run_group__ = None if run_group is None else str(run_group)
+        cls.__description__ = description
+        cls.__custom_args__ = custom_args
+        return cls
+
+    return tracer
+
+
+def BeforeSuite(enabled: bool = True, description: str = "", timeout: int = 0, **custom_args):
+    """
+        The BeforeSuite test fixture, it will be executed before test suite started.
+
+    :param enabled: enable or disable this test fixture.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.BeforeSuite
+        func.__enabled__ = enabled
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def BeforeClass(enabled: bool = True, description: str = "", timeout: int = 0, **custom_args):
+    """
+        The BeforeClass test fixture, it will be executed before test class started.
+
+    :param enabled: enable or disable this test fixture.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.BeforeClass
+        func.__enabled__ = enabled
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def BeforeGroup(enabled: bool = True, group: str = "DEFAULT", description: str = "", timeout: int = 0, **custom_args):
+    """
+        The BeforeGroup test fixture, it will be executed before test group started.
+
+    :param enabled: enable or disable this test fixture.
+    :param group: the group that this test fixture belongs to.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.BeforeGroup
+        func.__enabled__ = enabled
+        func.__group__ = group
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def BeforeMethod(enabled: bool = True, group: str = "DEFAULT", description: str = "", timeout: int = 0, **custom_args):
+    """
+        The BeforeMethod test fixture, it will be executed before test started.
+
+    :param enabled: enable or disable this test fixture.
+    :param group: the group that this test fixture belongs to.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.BeforeMethod
+        func.__enabled__ = enabled
+        func.__group__ = group
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def Test(enabled: bool = True,
+         tags: Union[str, List[str], Tuple[str, ...]] = [],
+         expected_exceptions: Union[Type[Exception], List[Type[Exception]], Tuple[Type[Exception], ...], Dict[Type[Exception], str]] = None,
+         data_provider: Iterable = None,
+         data_name: Callable[[int, Any], str] = None,
+         group: str = "DEFAULT",
+         description: str = "",
+         timeout: int = 0,
+         **custom_args):
+    """
+        The Test decorator, it is used to mark a test as Test.
+
+    :param enabled: enable or disable this test.
+    :param tags: the tags of this test. It can be string (separated by comma) or list or tuple.
+    :param expected_exceptions: the expected exceptions of this test.
+        If no exception or a different one is thrown, this test will be marked as failed.
+        The possible values of this parameter are::
+            Exception Class:
+                expected_exceptions=AttributeError
+            Exception Class list or tuple:
+                expected_exceptions=[AttributeError, IndexError]
+                expected_exceptions=(AttributeError, IndexError)
+            Exception Class and regular expression of expected message dict:
+                expected_exceptions={AttributeError: '.*object has no attribute.*'}
+        Note: If you want to match the entire exception message, just include anchors in the regex pattern.
+    :param data_provider: the data provider for this test, the data provider must be iterable.
+        Following test will be run four times with the test data supplied from data provider.
+            @Test(data_provider=[(1, 1, 2), (2, 3, 5), (4, 5, 9), (9, 9, 18)])
+            def test_add(self, number1, number2, sum_):
+                assert_that(number1 + number2).is_equal_to(sum_)
+    :param data_name: the data name function of this test.
+        Note: If no data_provider specified, data_name will be ignored.
+        For example:
+            @Test(data_provider=["foo", "bar"], data_name=lambda index, params: params[0])
+            def test_something(self, name):
+                assert_that(name).is_not_none()
+            The test names are test_something#foo and test_something#bar.
+    :param group: the group that this test belongs to.
+    :param description: the description of this test.
+    :param timeout: the timeout of this test (in seconds).
+    :param custom_args: the custom arguments of this test.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.Test
+        func.__enabled__ = enabled
+        func.__group__ = group
+        func.__description__ = description
+        # deal with tags
+        if not tags:
+            func.__tags__ = []
+        else:
+            if isinstance(tags, str):
+                tag_list = tags.split(",")
+            elif isinstance(tags, (list, tuple)):
+                tag_list = tags
+            else:
+                raise ValueError(
+                    "Tags type %s is not supported. Please use string (separated by comma) or list or tuple." % type(tags))
+            func.__tags__ = sorted([str(tag).strip() for tag in tag_list if str(tag).strip()])
+        # deal with expected exceptions
+        if not expected_exceptions:
+            func.__expected_exceptions__ = None
+        else:
+            exceptions = {}
+            if inspect.isclass(expected_exceptions):
+                if issubclass(expected_exceptions, Exception):
+                    exceptions[expected_exceptions] = None
+                else:
+                    raise ValueError("Expected exception should be a sub class of Exception.")
+            elif isinstance(expected_exceptions, (tuple, list)):
+                for exception in expected_exceptions:
+                    if issubclass(exception, Exception):
+                        exceptions[exception] = None
+                    else:
+                        raise ValueError("Expected exception should be a sub class of Exception.")
+            elif isinstance(expected_exceptions, dict):
+                for exception, message in expected_exceptions.items():
+                    if issubclass(exception, Exception):
+                        exceptions[exception] = re.compile(message)
+                    else:
+                        raise ValueError("Expected exception should be a sub class of Exception.")
+            else:
+                raise ValueError("Expected exceptions type %s is not supported. Please use class or list or tuple or dict."
+                                 % type(expected_exceptions))
+            func.__expected_exceptions__ = exceptions
+
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = get_parameters_count(func)
+        # for data provider
+        #                     normal    zipped    unzipped    mocked
+        # __parameters__       None      None       None     not None
+        # __data_index__       None      None       None     not None
+        # __data_provider__    None    not None   not None   not None
+        # __funcs__           [func]      []       [mocks]    [mock]
+        func.__parameters__ = None
+        func.__data_index__ = None
+        func.__data_provider__ = None
+        func.__funcs__ = [func]
+        if data_provider is not None:
+            func.__data_provider__ = data_provider
+            func.__funcs__ = []
+            func.__data_name__ = data_name or (lambda index, params: index + 1)
+            if len(inspect.getargspec(func.__data_name__)[0]) != 2:
+                raise TypeError("Data name function must be declared with 2 parameters.")
+        return func
+
+    return handle_func
+
+
+def AfterMethod(enabled: bool = True, always_run: bool = True, group: str = "DEFAULT", description: str = "", timeout: int = 0,
+                **custom_args):
+    """
+        The AfterMethod test fixture, it will be executed after test finished.
+
+    :param enabled: enable or disable this test fixture.
+    :param always_run: if set to true, this test fixture will be run even if the @BeforeMethod is failed. Otherwise, this test fixture will be skipped.
+    :param group: the group that this test fixture belongs to.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.AfterMethod
+        func.__enabled__ = enabled
+        func.__always_run__ = always_run
+        func.__group__ = group
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def AfterGroup(enabled: bool = True, always_run: bool = True, group: str = "DEFAULT", description: str = "", timeout: int = 0,
+               **custom_args):
+    """
+        The AfterGroup test fixture, it will be executed after test group finished.
+
+    :param enabled: enable or disable this test fixture.
+    :param always_run: if set to true, this test fixture will be run even if the @BeforeGroup is failed. Otherwise, this test fixture will be skipped.
+    :param group: the group that this test fixture belongs to.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.AfterGroup
+        func.__enabled__ = enabled
+        func.__always_run__ = always_run
+        func.__group__ = group
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def AfterClass(enabled: bool = True, always_run: bool = True, description: str = "", timeout: int = 0, **custom_args):
+    """
+        The AfterClass test fixture, it will be executed after test class finished.
+
+    :param enabled: enable or disable this test fixture.
+    :param always_run: if set to true, this test fixture will be run even if the @BeforeClass is failed. Otherwise, this test fixture will be skipped.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.AfterClass
+        func.__enabled__ = enabled
+        func.__always_run__ = always_run
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def AfterSuite(enabled: bool = True, always_run: bool = True, description: str = "", timeout: int = 0, **custom_args):
+    """
+        The AfterSuite test fixture, it will be executed after test suite finished.
+
+    :param enabled: enable or disable this test fixture.
+    :param always_run: if set to true, this test fixture will be run even if the @BeforeSuite is failed. Otherwise, this test fixture will be skipped.
+    :param description: the description of this test fixture.
+    :param timeout: the timeout of this test fixture (in seconds).
+    :param custom_args: the custom arguments of this test fixture.
+    """
+
+    def handle_func(func):
+        func.__pd_type__ = PDecoratorType.AfterSuite
+        func.__enabled__ = enabled
+        func.__always_run__ = always_run
+        func.__description__ = description
+        func.__timeout__ = timeout
+        func.__custom_args__ = custom_args
+        func.__location__ = __get_location(func)
+        func.__parameters_count__ = __get_parameters_count_of_test_configuration(func)
+        return func
+
+    return handle_func
+
+
+def __get_location(func):
+    file_path = os.path.abspath(inspect.getfile(func))
+    _, line_no = inspect.getsourcelines(func)
+    return urljoin("file:", "%s:%s" % (unquote(pathname2url(file_path)), line_no))
+
+
+def __get_parameters_count_of_test_configuration(func):
+    parameters_count = get_parameters_count(func)
+    if parameters_count not in [1, 2]:
+        raise TypeError("%s() cannot be declared with %s parameters. "
+                        "Please declare with 1 or 2 parameters (including self)." % (func.__name__, parameters_count))
+    return parameters_count

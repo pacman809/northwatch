@@ -133,8 +133,8 @@ def connect_geth():
 #HEX TO DECIMAL CONVERSION 
 def HexToDec(hex):
 	
-	x = 	int(hex, 16)
-	x = 	str(x)
+
+	x = 	str(int(hex, 16))
 	
 	return 	x
 
@@ -142,8 +142,8 @@ def HexToDec(hex):
 #############################################################
 #DECIMAL TO HEX CONVERSION
 def DecToHex(dec):
-	x = 	int(dec)
-	x =		hex(x)
+
+	x =		hex(int(dec))
 
 	return x
 
@@ -181,7 +181,6 @@ def rawParse(input):
 	while x <= fieldNumber:
 		b = 		a + 64
 		sector = 	input[a:b]
-		#sect = 		HexToDec(sector)
 		a = 		b
 		x = 		x + 1
 		list.append(sector)
@@ -292,11 +291,11 @@ def payout():
 
 			for x in myCol.find({"to_address": "0xc660934ec084698e373ac844ce29cf27b104f696"}).limit(1000).sort('block_number', pymongo.DESCENDING):
 				
-				bob = x["input"]
-				bob = str(bob[0:10])
+				payout_input = str(x["input"][0:10])
 
-				if bob == "0xdf6c39fb":
+				if payout_input == "0xdf6c39fb":
 					list.append(x["block_timestamp"])
+
 					payout = list[0]
 					payout = timestamp(payout)
 
@@ -338,10 +337,8 @@ def query(search):
 
 def balanceInfo(personal_address):
     results = {}
-    #contract_address =  ["0xd314d564c36c1b9fbbf6b440122f84da9a551029", "0xc8481effc60fa765ccf8286ba346233ed113b024","0x59195ebd987bde65258547041e1baed5fbd18e8b","0xb8648f065205b9c31055653d668723f4b840e4c0","0x14d01e64f0573925e28d69dc3846b2f0986ab8b8","0x280750ccb7554faec2079e8d8719515d6decdc84","0x0792fe820e7f65da788ac002ce88c74816b59142","0xdc14c317abf4fca7ac2255f0da73b39f63598c76","0x0343350a2b298370381cac03fe3c525c28600b21","0xb70b02222c53abf4e9ccac8fb701425db2ec4de1","0x200941b46e8cbb645fe85cdd526e48826acfd8fa","0x72649f2a739f2ed7454ca146fb9ba589747287f2", "0x1793bc201acbb64f3925ae5cb4355e78864a2597","0xbc77c9ae443940b8ca147870063ee2213264d8b6","0x5f2786097350e9d0a0cbba233774631991dc5e40","0xdfd55110016251c7537d7645f35f92afcfc468ed","0xa6002d6df526683b528f87f95b4903f3c76cb7de","0x9c9b95ed2123c3d7e8e7b65c7cd7b302bc26a13a"]
     abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]')
     web3 = connect_geth()
-    geth_connect = web3.isConnected()
     account_checksum = Web3.toChecksumAddress(personal_address)
     balance = web3.eth.getBalance(account_checksum)
     halo3 = web3.fromWei(balance, "ether")
@@ -354,9 +351,10 @@ def balanceInfo(personal_address):
         symbol = contract.functions.symbol().call()
         balance = contract.functions.balanceOf(user_clean).call()
         balance = web3.fromWei(balance,"ether")
+        decimals = contract.functions.decimals().call()
 
-        if symbol == "BTC" and balance != 0 :
-            btc_balance = balance * 10000000000
+        if decimals == 8 and balance != 0 :
+            btc_balance = balance * 100000000
             balance = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
             results.update( {symbol : btc_balance} )
         
@@ -377,8 +375,7 @@ def blockResults(id):
 	
 	try:
 		for x in myCol.find({"number" : id}):
-			hashy = x["hash"]
-			for y in myCol2.find({"block_hash" : hashy }):
+			for y in myCol2.find({"block_hash" : x["hash"] }):
 				x.update(y)
 			return x
 	except:
@@ -414,7 +411,7 @@ def transResults(id):
 		for x in myCol.find({"hash" : id}):
 			
 			x["block_timestamp"] 	= timestamp(x["block_timestamp"])
-			x["value"]				= Web3.fromWei(x["value"], 'Ether')
+			x["value"]				= '{0:.20f}'.format(x["value"] / 1000000000000000000 ).rstrip('0').rstrip('.')
 
 			return x
 	except:

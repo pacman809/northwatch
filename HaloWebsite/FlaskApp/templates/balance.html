@@ -88,7 +88,7 @@ Hash <a href="https://www.haloexplorer.com/tx/{{ history.hash }} " style=" color
   {% if history.description == "H-ETH sent to ETH Chain" %}
    
   <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
-<img src="/static/img/etherscan.png" width="150" height="" alt="" class="etherscan" ><a href ="{{ history.external }}" style=" color: #328ba8">{{ history.to_address }}</td>
+<img src="/static/img/etherscan.png" width="150" height="" alt="" class="etherscan" ><a href ="{{ history.external }}" style=" color: #328ba8"> {{ history.to_address }}</td>
   <td>{{ history.value }}</td>
   
   
