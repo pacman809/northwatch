@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, flash, redirect 
+from flask import Flask, request, render_template, flash, redirect, send_file
 from dailytx import dailyTransactions
 from web3 import Web3
 from heth import solvency
@@ -18,6 +18,9 @@ app.config["DEBUG"] = True
 def google():
 	return render_template("sitemap.xml")
 
+@app.route("/image")
+def image():
+	return send_file("positivessl_trust_seal_sm_124x32.png", mimetype='image/gif')
 #--------------------------------------------------------------------------------------------------------------------------
 
 @app.route("/.well-known/brave-rewards-verification.txt")
@@ -26,9 +29,9 @@ def brave():
 
 #--------------------------------------------------------------------------------------------------------------------------
 
-@app.route("/.well-known/pki-validation/56FA2597B1C83239463680471A920401.txt")
+@app.route("/.well-known/pki-validation/673BAB75F6FEBBC68144FC4594C13136.txt")
 def sslone():
-	return render_template("56FA2597B1C83239463680471A920401.txt")
+	return render_template("673BAB75F6FEBBC68144FC4594C13136.txt")
 
 #---------------------------------------------------------------------------------------------------------------------------
 
