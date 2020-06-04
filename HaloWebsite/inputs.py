@@ -87,7 +87,7 @@ def tokenType(contract):
 	"0x978dc9ca2d75c9d187a9cb542c74c50c579a034a"	: "F2",
 	"0xdfd55110016251c7537d7645f35f92afcfc468ed" 	: "HXRO", #
 	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "FCT", #8 decimals
-	"0x4734e87fbd52516ff729345bbf910557f630477c"	: "P2",
+	"0x4734e87fbd52516ff729345bbf910557f630477c"	: "PEGNET",
 	"0x0343350a2b298370381cac03fe3c525c28600b21"	: "VTHO"
 
 	}
