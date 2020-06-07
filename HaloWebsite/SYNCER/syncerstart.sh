@@ -61,7 +61,7 @@ do
 
 			#/home/pacman/environments/py_3.7/bin/ethereumetl export_all -s $startblock -e $startblock -b 10000000 --provider-uri http://192.168.1.231:8545 -o halo-mainnet-csv 
 			#/home/pacman/environmnets/py_3.7/bin/ethereumetl export_all --start-block $endblock --end-block $endblock --provider-uri http://mainnet.haloplatform.tech 
-			/home/garth/.local/bin/ethereumetl  export_all -s $startblock -e $endblock  -b 1000000 --provider-uri http://192.168.0.58:8545 -o database
+			/home/garth/.local/bin/ethereumetl  export_all -s $startblock -e $endblock  -b 1000000 --provider-uri http://192.168.1.103:8545 -o database
 			#/home/pacman/environments/py_3.7/bin/ethereumetl export_all -s $startblock -e $endblock -b 10000000 --provider-uri http://mainnet.haloplatform.tech -o halo-mainnet-csv
 			
 			#--------------------------------------------------------------------------------

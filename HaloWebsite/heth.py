@@ -16,13 +16,14 @@ def solvency():
 		address = Web3.toChecksumAddress(0xd314d564c36c1b9fbbf6b440122f84da9a551029)
 		contract = web3.eth.contract(address=address, abi=abi)
 		total_supply = contract.functions.totalSupply().call()
-		total_supply = Web3.fromWei(total_supply,"Ether")       
-		total_supply = '%.18f' % total_supply           
+		total_supply = Web3.fromWei(total_supply,"Ether")
+		total_supply = '%.18f' % total_supply
 		api_url = requests.get("https://api.blockcypher.com/v1/eth/main/addrs/0x70a41917365e772e41d404b3f7870ca8919b4fbe/balance")
-		api_url2 = requests.get("https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD")
+		#api_url2 = requests.get("https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD")
+		api_url2 = "Not Working Anymore"
 		data_results = api_url.json()
-		data_results2 = api_url2.json()
-		price_usd = float(data_results2[0]["price_usd"])
+		#data_results2 = api_url2.json()
+		#price_usd = float(data_results2[0]["price_usd"])
 		ETH = data_results['final_balance']
 		ETH = Web3.fromWei(ETH, 'Ether')
 		a = float(total_supply)
@@ -40,7 +41,7 @@ def solvency():
 		"dex"			: total_supply,
 		"eth"			: ETH,
 		"difference"	: difference,
-		"price"			: price_usd,
+		"price"			: api_url2,
 		"shortfall"		: shortfall
 		}
 

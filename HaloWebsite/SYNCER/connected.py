@@ -8,7 +8,7 @@ from web3 import Web3
 
 #geth_url = "http://mainnet.haloplatform.tech"		#HaloPlatform's shitty node. Only good for Block number
 #geth_url = "http://192.168.1.139:8545"				#Full Blown Node good for everything
-geth_url = "http://192.168.0.58:8545"
+geth_url = "http://192.168.1.103:8545"
 #geth_url = ""
 #geth_url = ""
 #geth_url = ""
