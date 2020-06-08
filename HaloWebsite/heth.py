@@ -20,7 +20,7 @@ def solvency():
 		total_supply = '%.18f' % total_supply
 		api_url = requests.get("https://api.blockcypher.com/v1/eth/main/addrs/0x70a41917365e772e41d404b3f7870ca8919b4fbe/balance")
 		#api_url2 = requests.get("https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD")
-		api_url2 = "Not Working Anymore"
+		#api_url2 = "Not Working Anymore"
 		data_results = api_url.json()
 		#data_results2 = api_url2.json()
 		#price_usd = float(data_results2[0]["price_usd"])
@@ -30,9 +30,9 @@ def solvency():
 		b = float(ETH)
 		difference = float(a-b)
 		date = datetime.now()
-		shortfall = price_usd * difference
-		shortfall = '{0:.2f}'.format(shortfall)
-		shortfall = price_usd * difference
+		#shortfall = price_usd * difference
+		#shortfall = '{0:.2f}'.format(shortfall)
+		#shortfall = price_usd * difference
 
 
 		solve = {
@@ -40,9 +40,9 @@ def solvency():
 		"date"			: date,
 		"dex"			: total_supply,
 		"eth"			: ETH,
-		"difference"	: difference,
-		"price"			: api_url2,
-		"shortfall"		: shortfall
+		"difference"	: difference
+		#"price"			: api_url2,
+		#"shortfall"		: shortfall
 		}
 
 

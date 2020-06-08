@@ -7,7 +7,7 @@ def connect_geth():
 	#geth_url = "mainnet.haloplatform.tech"
 	#geth_url = "http://192.168.1.231:8545"
 	#garth@192.168.1.231
-	geth_url = "http://192.168.1.103"
+	geth_url = "http://192.168.0.58:8545"
 	#geth_url = "http://192.168.1.103:8545"
 	web3 = Web3(Web3.HTTPProvider(geth_url))
 	return web3

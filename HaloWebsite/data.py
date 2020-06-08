@@ -6,7 +6,7 @@ import requests
 #--------------------CONFIG--------------------------------#
 
 #RPC NODE URL
-GethUrl = "http://192.168.1.103:8545"
+GethUrl = "http://192.168.0.58:8545"
 #
 
 #DATABASE NAME
