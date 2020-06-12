@@ -1,13 +1,14 @@
 from flask import Flask, request, render_template, flash, redirect, send_file
-from dailytx import dailyTransactions
+from dailytx import dailyTransactions, OnedailyTransactions
 from web3 import Web3
 from heth import solvency
 from explorerdryrun import getAccountHistory
-from latesttx import lastTx
+from latesttx import lastTx, OnelastTx
+
 import os
 from flask import send_from_directory
 from powerball import powerball
-from data import performance, masternode, payout, query, balanceInfo, blockResults, getType, timestamp, transResults, rawParse
+from data import onetimestamp,OneblockResults, performance, masternode, payout, query, balanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -36,9 +37,9 @@ def sslone():
 #---------------------------------------------------------------------------------------------------------------------------
 
 
-@app.route("/.well-known/pki-validation/AF6E047DFEBBD1690C65D339A7014C87.txt")
+@app.route("/.well-known/pki-validation/1217BF0E73C8CC49E03EF1DAEA0DD25B.txt")
 def ssl():
-	return render_template("AF6E047DFEBBD1690C65D339A7014C87.txt")
+	return render_template("1217BF0E73C8CC49E03EF1DAEA0DD25B.txt")
 
 #---------------------------------------------------------------------------------------------------------------------------
 
@@ -81,11 +82,29 @@ def main():
 #---------------------------------------------------------------------------------------------------------------------------
 
 
+
+@app.route('/ether1', methods=["GET", "POST"])
+def ether1main():
+	
+	history = OnelastTx()
+	return render_template('ether1index.html', history= history )
+	#return render_template('maint.html')
+
+	
+#---------------------------------------------------------------------------------------------------------------------------
 @app.route('/stats')
 def stats():
 
 	transactions = dailyTransactions()
 	result = performance()
+	return render_template('stats.html', result= result, transactions= transactions)
+
+#---------------------------------------------------------------------------------------------------------------------------
+@app.route('/ether1/stats')
+def onestats():
+
+	transactions = OnedailyTransactions()
+	result = Oneperformance()
 	return render_template('stats.html', result= result, transactions= transactions)
 
 #---------------------------------------------------------------------------------------------------------------------------
@@ -123,7 +142,31 @@ def block(id):
 
 #---------------------------------------------------------------------------------------------------------------------------
 
+@app.route('/ether1/block/<id>', methods=['GET', 'POST'])
 
+
+def Oneblock(id):
+	
+	block = int(id)
+	result = OneblockResults(block)
+	transactions = result
+	current = Oneperformance()
+	#data = result["input"]
+	#inputData = getType(data)	
+
+	if result is not  None:
+		confirmations = current["BLOCKNUMBER"] - result["number"]
+		status = "Database"
+		#value = Web3.fromWei(result["value"], 'Ether')
+		time = onetimestamp(result["timestamp"])
+
+		return render_template('1block.html', result= result, id= id, status= status, confirmations= confirmations, time= time)
+
+	else:
+		status = "Not Databased RPC call coming"	
+		return render_template('1block.html', result= result, id= id, status= status)
+
+#---------------------------------------------------------------------------------------------------------------------------
 @app.route('/process', methods=["POST"])
 def process():
 

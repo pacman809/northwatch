@@ -6,12 +6,13 @@ import requests
 #--------------------CONFIG--------------------------------#
 
 #RPC NODE URL
-GethUrl = "http://192.168.0.58:8545"
+GethUrl 	= "http://192.168.0.58:8545"
+OneGethUrl 	= "http://192.168.0.58:8585"
 #
 
 #DATABASE NAME
-DataBaseName 	= "halo-explorer-mainnet"
-#DataBaseName 	= "halo-explorer-testnet"
+DataBaseName 		= "halo-explorer-mainnet"
+OneDataBaseName 	= "ether1-explorer-mainnet"
 #
 
 #COIN CONTRACTS ORDER DETERMINES THE DISPLAY ON BALANCES PAGE
@@ -110,6 +111,14 @@ def database():
 
 	return mydb
 
+def Onedatabase():
+
+	db 			= OneDataBaseName
+	myclient 	= pymongo.MongoClient("mongodb://localhost:27017/")
+	mydb 		= myclient[db]
+
+	return mydb
+
 #############################################################
 #CONVERTS NANOSECOND TIMESTAMP TO REAL TIME LOCAL TO CST
 
@@ -120,12 +129,26 @@ def timestamp(stamp):
 			
 			return s
 
+
+def onetimestamp(stamp):
+			
+			dt 						= datetime.fromtimestamp(stamp)
+			s 						= dt.strftime('%Y-%m-%d %H:%M:%S')
+			
+			return s
+
 #############################################################
 #CREATES WEB3 INSTANCE TO CONNECT TO 
 
 def connect_geth():
 
 	web3 = Web3(Web3.HTTPProvider(GethUrl))
+	
+	return web3
+
+def one_connect_geth():
+
+	web3 = Web3(Web3.HTTPProvider(OneGethUrl))
 	
 	return web3
 
@@ -188,6 +211,7 @@ def rawParse(input):
 	return list		
 #############################################################
 #RETURNS BLOCKNUMBER, TIME, BLOCK AVERAGES FOR THE STATS PAGE
+
 def performance():
 
 		
@@ -196,6 +220,50 @@ def performance():
 
 		
 		web3 = connect_geth()
+		blockNumber2 = web3.eth.blockNumber  #BLOCKNUMBER RESULT
+		blockNumber = blockNumber2
+		previousBlockNumber = blockNumber - 5
+		blockNumber = previousBlockNumber + 1
+		averageBlock = blockNumber2 - 1000000
+
+		for x in myCol.find({"number": int(blockNumber)}):
+			blockNumber = x["timestamp"]
+
+			for y in myCol.find({"number": previousBlockNumber}):
+				previousBlockNumber = y["timestamp"]
+
+				for z in myCol.find({"number": averageBlock}):
+					averageBlock = z["timestamp"]
+		
+
+
+		average = blockNumber - averageBlock
+		average = average / 1000000
+		average = average / 1000000000
+		blockTime = blockNumber - previousBlockNumber
+		blockTime = blockTime / 1000000000
+		times =  datetime.utcnow() 
+
+		#ROUNDING
+
+		performance={
+			"BLOCKNUMBER":	blockNumber2,
+			"TIME":			times,
+			"BLOCKTIME":	blockTime,
+			"AVERAGE":		average
+		}
+
+		return performance
+
+
+def Oneperformance(): #ETHER1
+
+		
+		mydb 		= Onedatabase()
+		myCol 		= mydb["blocks"]
+
+		
+		web3 = one_connect_geth()
 		blockNumber2 = web3.eth.blockNumber  #BLOCKNUMBER RESULT
 		blockNumber = blockNumber2
 		previousBlockNumber = blockNumber - 5
@@ -381,7 +449,22 @@ def blockResults(id):
 	except:
 		return None
 
+def OneblockResults(id):
+	
+	mydb 		= 	Onedatabase()
+	myCol 		= 	mydb["blocks"]
+	myCol2 		=	mydb["transactions"]
+	
+	try:
+		for x in myCol.find({"number" : id}):
+			for y in myCol2.find({"block_hash" : x["hash"] }):
+				x.update(y)
+			return x
+	except:
+		return None
 
+
+##############################################################
 ##############################################################
 #THIS IS SHIT!!!! I HATE IT, NEEDS TO CHANGE
 def getType(inpoot):

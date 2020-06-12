@@ -1,6 +1,6 @@
 
 from web3 import Web3
-from data import connect_geth, timestamp, database
+from data import connect_geth, timestamp, database, onetimestamp
 
 #------------------------------------------------------------------------------------------------------------
 #GENERAL TRANSACTION
@@ -207,6 +207,72 @@ def interHalo(receivedInput):
 	
 	return result
 	
+
+def etherOneTx(receivedInput):
+	
+	DESCRIPTOR = "Ether-1 Transaction"
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+	
+
+	result					={
+
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+	}
+
+	
+	return result	
+
+def bot_tip(receivedInput):
+	
+	DESCRIPTOR = "Tip Bot"
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+	
+
+	result					={
+
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+	}
+
+	
+	return result		
 #---------------------------------------------------------------------------------------------------
 
 def Burn(receivedInput):
@@ -1278,6 +1344,8 @@ def contractDeployment(receivedInput):
 	return result
 
 
+
+
 Inputs	= {
 	
 	"0x": 			interHalo, #Done
@@ -1343,4 +1411,117 @@ Inputs	= {
 	"0x42966c68" : Burn
 
 
+}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ETHER _ 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#MMMMMMMMMMMMMMMMm/mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMMh/-.hMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMy:/-..yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMs///:---sMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMNs///+:::::oNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmdMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMmooo+++/::///oNMMMMMMMMMMMMMMMMMMMMMMMMMMMMhyMMMMM/ NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN--+MMMM
+#MMMMMMd++ooo+o+/////+omMMMMMMMMMMMMMMMMMMMMMMMMMMM:"MMMMM/ NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM""MMMM
+#MMMMMh//+oosoo++++++++omMMMMMMMMMMMMMs+++++++sNMM+. +omMM/ Nho///+sMMMNs+++++++sNMMMNs+++MMMMMMMMMMM""MMMM
+#MMMMs://+oossso+oooooooodMMMMMMMMMMMo sNNNNNs oMMm-'mmNMM/ :smNNNs sMMo sNNNNNs oMMMo sNNMMMMMMMMMMM""MMMM
+#MMMo-://+oossssoooossssssdMMMMMMMMMMo dMMMMMm +MMM:'MMMMM/ NMMMMMd oMM+ dMMMMMm +MMM+ mMMMMMMMMMMMMM''MMMM
+#MMMMNhs++oossysssssssydmMMMMMMMMMMMMo +ooooo+ +MMM:'MMMMM/ NMMMMMd oMM+ +ooooo+ +MMM+ mMMMMh:::+MMMM""MMMM
+#MMMNmmMMNdyssyyssyhmNMNmmNMMMMMMMMMMo ydddddddmMMM:'MMMMM/ NMMMMMd oMM+ ydddddddmMMM+ mMMMMMMMMMMMMM""MMMM
+#MMMMMdhhdmMMNmdmNMMNdhhdMMMMMMMMMMMMo dMMMMMNshMMM:'MMMMM/ NMMMMMd oMM+ dMMMMMNshMMM+ mMMMMMMMMMMMMM""MMMM
+#MMMMMMdyyyoshmMmdhyyyymMMMMMMMMMMMMMy /hhhhh+ sMMM/ ohdMM/ NMMMMMd oMMs /hhhhh/ sMMy: sdMMMMMMMMMMMs""sMMM
+#MMMMMMMmsoo+++NsssssyNMMMMMMMMMMMMMMMdyyyyyyydMMMMMdyyhMMdhMMMMMMNhmMMMdyyyyyyydMMMhhhhmMMMMMMMMMMMhhhhMMM
+#MMMMMMMMNs+///N++++yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMy/::N///hMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMMd:-N-/mMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+#MMMMMMMMMMMMN/m+NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+
+import codecs
+
+def blockMined(receivedInput):
+	
+	DESCRIPTOR = "New Block Mined"
+	try:
+		extra_data			= receivedInput['extra_data'][2:]
+		value 					= codecs.decode(extra_data, "hex").decode('utf-8')
+		#value 					= receivedInput['value'] / 1000000000000000000
+		#value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+	except:
+		value = "Miner Unknown"
+
+		#description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+	
+
+	result					={
+
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	#"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['number'],
+	#"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['miner'],
+	#"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	#"gas" 					: receivedInput['gas'],
+	#"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['timestamp']),
+	"description"			: "BlockMined"
+
+	}
+
+	
+	return result	
+
+OneInputs	= {
+	'blockmined':   blockMined,
+	'0xa6f2ae3a':	noInfo,
+	'0x2f54bf6e':	noInfo,
+	'0x43214675':	noInfo,
+	'0x1986a58c':	noInfo,
+	'0xc4d66de8':	noInfo,
+	'0xb61d27f6':	noInfo,
+	'0x60806040':	noInfo,
+	'0xa1adbb25':	noInfo,
+	'0x2e1a7d4d':	noInfo,
+	'0x3ccfd60b':	noInfo,
+	'0x793cd71e':	noInfo,
+	'0xcb1fa1d8':	noInfo,
+	'0xcc9ab267':	noInfo,
+	'0xb18759de':	noInfo,
+	'0x486579'	:	noInfo,
+	'0xb75c7dc6':	noInfo,
+	'0x06ab5923':	noInfo,
+	'0xf05834d6':	noInfo,
+	'0xa9059cbb':	noInfo,
+	'0x6dd5e67c':	noInfo,
+	'0x746970' 	:	bot_tip,
+	'0xccb726b1':	noInfo,
+	'0x57618e1d':	noInfo,
+	'0xf2fde38b':	noInfo,
+	'0xfdb5a03e':	noInfo,
+	'0x19b667da':	noInfo,		
+	'0x60606040':	noInfo,
+	'0x797af627':	noInfo,
+	'0x467fba0f':	noInfo,
+	'0x424c4f43':	noInfo,
+	'0x6703777d':	noInfo,
+	'0x604c602c':	noInfo,
+	'0x48657920':	noInfo,
+	'0x507ffba5':	noInfo,
+	'0x29ff4f53':	noInfo,
+	'0x8d036731':	noInfo,
+	'0x49ade46d':	noInfo,
+	'0x60748060':	noInfo,
+	'0xfdacd576':	noInfo,
+	'0x0a9ef927':	noInfo,
+	'0x4e71d92d':	noInfo,
+	'0x'		:	etherOneTx,
+	'0x04fc7c6d':	noInfo,
+	'0x230d6ed8':	noInfo,
+	'0xd65ab5f2':	noInfo,
+	'0xd420a7e6':	noInfo,
+	'0xc375c2ef':	noInfo,
+	'0xd0e30db0':	noInfo,
+	'0x55c081d4':	noInfo,
+	'0x6102cb61':	noInfo,
+	'0x940c70f3':	noInfo
 }
