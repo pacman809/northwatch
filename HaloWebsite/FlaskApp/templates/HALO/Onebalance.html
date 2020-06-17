@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+  {% include 'google.html' %}
+  <meta name="keywords" content="Balances, Block Explorer, Ether-1, ETHOS, Eth fork, Balances, Address">
+  <meta name="description" content="NorthWatch Block Explorer">
+  <meta name="author" content="Ether-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+
+  <title>Balances {{ address |  truncate(16,true,'...')}}</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+  <link href="/static/css/mj_css.css" rel="stylesheet" type="text/css">
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="http://example.com/img/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+<body>
+
+<!-- HEADER -->
+{%  include 'header.html'  %}
+<!-- HEADER -ENDS -->
+
+
+<h1 align="center" style="font-size: 3vw" id="address">{{ address }}</h1>
+
+
+<p style="margin-left: 2.5em;padding: 0 1em 1em 0;border-width: 2px; border-color: black; border-style:solid;"></p>
+
+
+<table align="center" style="width:90%">
+        <tr>
+                <th>Coin</th>
+                <th>Balance</th>
+        </tr>
+        {% for k, v in balance.items() %}
+
+                <tr>
+                        <td><img src="/static/img/COINS/{{  k  }}.png"  width="50" height="" alt="" class="coins" ></td>
+                        <td>{{ v  }} <span style="float: right">{{ k }}</span></td>
+                </tr>
+        {% endfor %}  
+</table>
+
+<p style="margin-left: 2.5em;padding: 0 1em 1em 0;border-width: 2px; border-color: black; border-style:solid;"></p>
+
+{% if masternode| length  > 1  %}
+  {% set total = masternode|last  %}
+  <h1 align="center">Masternode Balance {{ "HALO {:,.2f}".format(total.total) }}</h1>
+  <div align="center">
+  <select name="Masternodes" style="color: black; width: 50%" onchange="location = this.value" >
+    <option selected disabled>Masternodes</option>
+    {% for x in masternode %}
+
+  <option value="https://www.haloexplorer.com/balance/{{ x.masternode }}"> Tier {{ x.tier }} - {{ x.masternode }} Shares = {{ x.shares }} </option>
+    {% endfor %}
+</select>
+</div>
+
+{% else %}
+
+  <h1 align="center">No Masternodes</h1>
+{% endif %}
+
+        <h2 align="center">TX Count {{ txCount }}</h2>    
+            
+<p style="margin-left: 2.5em;padding: 0 1em 1em 0;border-width: 2px; border-color: black; border-style:solid;"></p>
+
+<table align=center style="display: block; overflow-x: auto ; width: 90%" >
+        <tr>
+                <th>Account</th>
+                <th>Activity</th>
+        </tr>
+
+{% for history in history %}
+    {% if history.direction == "out" %}
+    <tr>
+  <td style="white-space:pre-wrap">{{ history.block_timestamp }} <img src="/static/img/Out.png" width="30" height="" style="float: right" class="inOut">
+<a href="https://www.haloexplorer.com/block/{{ history.block_number }} " style=" color: #7F91B9">{{ history.block_number }}</a> 
+</td>
+  <td style="white-space:pre-wrap"><u>{{ history.descriptor }} </u>
+Hash <a href="https://www.haloexplorer.com/tx/{{ history.hash }} " style=" color: #7F91B9">{{ history.hash | truncate(25,true,' .....') }}</a></td>
+  {% if history.description == "H-ETH sent to ETH Chain" %}
+   
+  <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
+<img src="/static/img/etherscan.png" width="150" height="" alt="" class="etherscan" ><a href ="{{ history.external }}" style=" color: #328ba8"> {{ history.to_address }}</td>
+  <td>{{ history.value }}</td>
+  
+  
+  {% else %}
+  
+  <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
+To: <a href="https://www.haloexplorer.com/balance/{{ history.to_address }} " style=" color: #7F91B9">{{ history.to_address }}</a></td>
+  <td>{{ history.value }}{{ history.input }}</td>
+  
+   {% endif %} 
+
+    {% else %}
+    <tr>
+  <td style="white-space:pre-wrap">{{ history.block_timestamp }} <img src="/static/img/In.png" width="30" height="" style="float: right" class="inOut">
+<a href="https://www.haloexplorer.com/block/{{ history.block_number }} " style=" color: #7F91B9">{{ history.block_number }}</a> 
+</td>
+  <td style="white-space:pre-wrap"><u>{{ history.descriptor }} </u>
+Hash <a href="https://www.haloexplorer.com/tx/{{ history.hash }} " style=" color: #7F91B9">{{ history.hash | truncate(25,true,' .....') }}</a></td>
+  <td style="white-space:pre-wrap">From: <a href="https://www.haloexplorer.com/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
+To: <a href="https://www.haloexplorer.com/balance/{{ history.to_address }} " style=" color: #7F91B9">{{ history.to_address }}</a></td>
+  <td>{{ history.value}}</td>
+  
+
+    {% endif %}
+{% endfor %}
+
+</table>
+
+
+</table>
+
+
+
+<!-- FOOTER -->
+{% include 'footer.html' %}
+<!-- FOOTER - ENDS -->
+
+</body>
+</html>

@@ -36,6 +36,13 @@ all_coin_contract_addresses =  [
 "0xa6002d6df526683b528f87f95b4903f3c76cb7de",
 "0x9c9b95ed2123c3d7e8e7b65c7cd7b302bc26a13a"
 ]
+
+ether1_all_coin_contract_addresses = [
+"0xf69bc54fda5d2689a4d4fe8c1e6a5cbc25f6dc59",	#VOTE
+"0x92e6c6eee2d4de4585ffe101e1e3288fb4e28330",	#KOT
+"0xa888fbc3f9ca63776913d807804fc31c5ebda6d7",	#KOT
+"0xc715e66000ceaee350c82c34b9b153c3c52f295b"	#BTC
+]
 #
 
 Inputs	= {
@@ -400,6 +407,29 @@ def query(search):
 		except ValueError:
 		   return error
 
+#WHEN THE SEARCH BAR IS ACTIVATED THIS WILL DETERMINE WHETHER ITS AN ADDRESS, BLOCK OR HASH
+def Onequery(search):
+
+	search = str(search)
+	error = None
+
+	if len(search) == 42:
+		search = "https://www.haloexplorer.com/ether1/balance/{}".format(search) # is this an address?
+		return search
+
+	if len(search) == 66:
+		search = "https://www.haloexplorer.com/ether1/tx/{}".format(search)#is this a transaction?
+		return search
+
+	if len(search) <= 8:
+		try:
+		   val = int(search)
+		   search = "https://www.haloexplorer.com/ether1/block/{}".format(search)# is this a block number / invalid at block 100000000 Y2K
+		   return search
+
+		except ValueError:
+		   return error
+
 ##############################################################
 #LOADS CONTRACT BALANCES FOR EACH ITEM IN contract_address PULLS BALANCE
 
@@ -432,6 +462,40 @@ def balanceInfo(personal_address):
 
 
     return results
+
+
+#LOADS CONTRACT BALANCES FOR EACH ITEM IN contract_address PULLS BALANCE #ETHER1
+
+def OnebalanceInfo(personal_address):
+    results = {}
+    abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]')
+    web3 = one_connect_geth()
+    account_checksum = Web3.toChecksumAddress(personal_address)
+    balance = web3.eth.getBalance(account_checksum)
+    halo3 = web3.fromWei(balance, "ether")
+    results.update( {"ETHO": halo3} )
+
+    for i in ether1_all_coin_contract_addresses:
+        address = Web3.toChecksumAddress(i)
+        user_clean = Web3.toChecksumAddress(personal_address)
+        contract = web3.eth.contract(address=address, abi=abi)
+        symbol = contract.functions.symbol().call()
+        balance = contract.functions.balanceOf(user_clean).call()
+        balance = web3.fromWei(balance,"ether")
+        decimals = contract.functions.decimals().call()
+
+        if decimals == 8 and balance != 0 :
+            btc_balance = balance * 100000000
+            balance = '{0:.20f}'.format(balance).rstrip('0').rstrip('.')
+            results.update( {symbol : btc_balance} )
+        
+        
+        if balance != 0:
+            results.update( {symbol : balance} )
+
+
+    return results
+
 
 ##############################################################
 #LOADS CONTRACT BALANCES FOR EACH ITEM IN contract_address PULLS BALANCE

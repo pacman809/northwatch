@@ -1,6 +1,6 @@
-
+import pymongo
 from web3 import Web3
-from data import connect_geth, timestamp, database, onetimestamp
+from data import connect_geth, timestamp, database, onetimestamp, one_connect_geth, Onedatabase
 
 #------------------------------------------------------------------------------------------------------------
 #GENERAL TRANSACTION
@@ -89,6 +89,14 @@ def tokenType(contract):
 	"0xa6002d6df526683b528f87f95b4903f3c76cb7de"	: "FCT", #8 decimals
 	"0x4734e87fbd52516ff729345bbf910557f630477c"	: "PEGNET",
 	"0x0343350a2b298370381cac03fe3c525c28600b21"	: "VTHO"
+
+	}
+
+	Onetokens		={
+	"0xf69bc54fda5d2689a4d4fe8c1e6a5cbc25f6dc59",	#VOTE
+	"0x92e6c6eee2d4de4585ffe101e1e3288fb4e28330",	#KOT
+	"0xa888fbc3f9ca63776913d807804fc31c5ebda6d7",	#KOT
+	"0xc715e66000ceaee350c82c34b9b153c3c52f295b"	#BTC
 
 	}
 
@@ -1435,13 +1443,64 @@ Inputs	= {
 #MMMMMMMMMMMMN/m+NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
 import codecs
+def EthoFuse(receivedInput):
+	
+	DESCRIPTOR = "Etho-Fuse Game"
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+	
+
+	result					={
+
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+	}
+
+	
+	return result	
+
+
 
 def blockMined(receivedInput):
 	
+	
+	myclient 	= 	pymongo.MongoClient("mongodb://localhost:27017/")
+	web3 		= 	one_connect_geth()
+	db 			= 	"ether1-explorer-mainnet"
+	mydb 		= 	myclient[db]
+	myCol 		= 	mydb["temp"]
+	myCol2 		= 	mydb["block_rewards"]
+	bn 			= 	receivedInput['number']
+
+	reward = "Unknown Not DB"
+	try:
+		for x in myCol2.find({"block_number": bn}):
+			reward = x["reward"]
+	except:
+		reward = "Unknown"
+
 	DESCRIPTOR = "New Block Mined"
 	try:
 		extra_data			= receivedInput['extra_data'][2:]
 		value 					= codecs.decode(extra_data, "hex").decode('utf-8')
+
 		#value 					= receivedInput['value'] / 1000000000000000000
 		#value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
 	except:
@@ -1455,14 +1514,10 @@ def blockMined(receivedInput):
 	"descriptor"			: DESCRIPTOR,
 	"hash" 					: receivedInput['hash'],			
 	"nonce"					: receivedInput['nonce'],
-	#"block_hash"			: receivedInput['block_hash'],
 	"block_number"			: receivedInput['number'],
-	#"transaction_index"		: receivedInput['transaction_index'],
 	"from_address"			: receivedInput['miner'],
-	#"to_address"			: receivedInput['to_address'],
 	"value"					: value,
-	#"gas" 					: receivedInput['gas'],
-	#"gas_price"				: receivedInput['gas_price'],
+	"reward" 				: reward,
 	"block_timestamp"		: onetimestamp(receivedInput['timestamp']),
 	"description"			: "BlockMined"
 
@@ -1471,57 +1526,118 @@ def blockMined(receivedInput):
 	
 	return result	
 
+
+def onenoInfo(receivedInput):
+
+	DESCRIPTOR = "PLEASE REPORT BLOCK NUMBER AND A BREIF SUMMARY OF WHAT YOU THINK THIS IS"
+	description = f'Unknown At the Current Time'
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+	
+	result					={
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+							}
+
+	
+	return result
+#------------------------------------------------------------------------------------------------------------
+
+
+
+def Masternode(receivedInput):
+
+	DESCRIPTOR = "Masternode Related. No Further Details"
+	description = f'Unknown At the Current Time'
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+	
+	result					={
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+							}
+
+	
+	return result
 OneInputs	= {
 	'blockmined':   blockMined,
-	'0xa6f2ae3a':	noInfo,
-	'0x2f54bf6e':	noInfo,
-	'0x43214675':	noInfo,
-	'0x1986a58c':	noInfo,
-	'0xc4d66de8':	noInfo,
-	'0xb61d27f6':	noInfo,
-	'0x60806040':	noInfo,
-	'0xa1adbb25':	noInfo,
-	'0x2e1a7d4d':	noInfo,
-	'0x3ccfd60b':	noInfo,
-	'0x793cd71e':	noInfo,
-	'0xcb1fa1d8':	noInfo,
-	'0xcc9ab267':	noInfo,
-	'0xb18759de':	noInfo,
-	'0x486579'	:	noInfo,
-	'0xb75c7dc6':	noInfo,
-	'0x06ab5923':	noInfo,
-	'0xf05834d6':	noInfo,
-	'0xa9059cbb':	noInfo,
-	'0x6dd5e67c':	noInfo,
+	'0xa6f2ae3a':	onenoInfo,
+	'0x2f54bf6e':	onenoInfo,
+	'0x43214675':	onenoInfo,
+	'0x1986a58c':	onenoInfo,
+	'0xc4d66de8':	onenoInfo,
+	'0xb61d27f6':	onenoInfo,
+	'0x60806040':	onenoInfo,
+	'0xa1adbb25':	onenoInfo,
+	'0x2e1a7d4d':	onenoInfo,
+	'0x3ccfd60b':	onenoInfo,
+	'0x793cd71e':	onenoInfo,
+	'0xcb1fa1d8':	onenoInfo,
+	'0xcc9ab267':	onenoInfo,
+	'0xb18759de':	onenoInfo,
+	'0x486579'	:	onenoInfo,
+	'0xb75c7dc6':	onenoInfo,
+	'0x06ab5923':	onenoInfo,
+	'0xf05834d6':	onenoInfo,
+	'0xa9059cbb':	onenoInfo, #-TokenTransfer,
+	'0x6dd5e67c':	onenoInfo,
 	'0x746970' 	:	bot_tip,
-	'0xccb726b1':	noInfo,
-	'0x57618e1d':	noInfo,
-	'0xf2fde38b':	noInfo,
-	'0xfdb5a03e':	noInfo,
-	'0x19b667da':	noInfo,		
-	'0x60606040':	noInfo,
-	'0x797af627':	noInfo,
-	'0x467fba0f':	noInfo,
-	'0x424c4f43':	noInfo,
-	'0x6703777d':	noInfo,
-	'0x604c602c':	noInfo,
-	'0x48657920':	noInfo,
-	'0x507ffba5':	noInfo,
-	'0x29ff4f53':	noInfo,
-	'0x8d036731':	noInfo,
-	'0x49ade46d':	noInfo,
-	'0x60748060':	noInfo,
-	'0xfdacd576':	noInfo,
-	'0x0a9ef927':	noInfo,
-	'0x4e71d92d':	noInfo,
+	'0xccb726b1':	onenoInfo,
+	'0x57618e1d':	onenoInfo,
+	'0xf2fde38b':	onenoInfo,
+	'0xfdb5a03e':	EthoFuse,
+	'0x19b667da':	onenoInfo,		
+	'0x60606040':	onenoInfo,
+	'0x797af627':	onenoInfo,
+	'0x467fba0f':	onenoInfo,
+	'0x424c4f43':	onenoInfo,
+	'0x6703777d':	onenoInfo,
+	'0x604c602c':	onenoInfo,
+	'0x48657920':	onenoInfo,
+	'0x507ffba5':	onenoInfo,
+	'0x29ff4f53':	onenoInfo,
+	'0x8d036731':	onenoInfo,
+	'0x49ade46d':	onenoInfo,
+	'0x60748060':	onenoInfo,
+	'0xfdacd576':	onenoInfo,
+	'0x0a9ef927':	onenoInfo,
+	'0x4e71d92d':	EthoFuse,
 	'0x'		:	etherOneTx,
-	'0x04fc7c6d':	noInfo,
-	'0x230d6ed8':	noInfo,
-	'0xd65ab5f2':	noInfo,
-	'0xd420a7e6':	noInfo,
-	'0xc375c2ef':	noInfo,
-	'0xd0e30db0':	noInfo,
-	'0x55c081d4':	noInfo,
-	'0x6102cb61':	noInfo,
-	'0x940c70f3':	noInfo
+	'0x04fc7c6d':	onenoInfo,
+	'0x230d6ed8':	onenoInfo,
+	'0xd65ab5f2':	onenoInfo,
+	'0xd420a7e6':	onenoInfo,
+	'0xc375c2ef':	Masternode,
+	'0xd0e30db0':	onenoInfo,
+	'0x55c081d4':	onenoInfo,
+	'0x6102cb61':	onenoInfo,
+	'0x940c70f3':	onenoInfo
 }
