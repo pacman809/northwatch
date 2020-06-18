@@ -1,9 +1,7 @@
 # northwatch
 NorthWatch Block Explorer
 
-Python Script Based Block Explorer For Halo Platform And Eth Based Coins Including ETH.
-If you are reading this than you know what it does..... :)
-
+Python Script Based Block Explorer For Eth Based Coins Including ETH.
 
 It Needs a Syncer and a MongoDb to run
 
