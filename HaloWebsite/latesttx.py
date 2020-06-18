@@ -29,7 +29,7 @@ def OnelastTx(): #ETHER-1
 	myCol 		= Onedatabase()["transactions"]
 	myCol2		= Onedatabase()["blocks"]
 	
-	for x in myCol2.find().limit(1000).sort('number', pymongo.DESCENDING):
+	for x in myCol2.find().limit(100).sort('number', pymongo.DESCENDING):
 		
 		if x["transaction_count"] != 0:
 

@@ -92,7 +92,7 @@ def stats():
 	return render_template('/HALO/stats.html', result= result, transactions= transactions)
 
 #---------------------------------------------------------------------------------------------------------------------------
-@app.route('/ether1/stats')
+@app.route('/ETHER1/stats')
 def onestats():
 
 	transactions = OnedailyTransactions()
@@ -159,7 +159,7 @@ def Oneblock(id):
 		return render_template('/ETHER1/block.html', result= result, id= id, status= status)
 
 #---------------------------------------------------------------------------------------------------------------------------
-@app.route('/process', methods=["POST"])
+@app.route('/HALO/process', methods=["POST"])
 def process():
 
 
@@ -175,7 +175,7 @@ def process():
 
 
 #---------------------------------------------------------------------------------------------------------------------------
-@app.route('/ether1/process', methods=["POST"])
+@app.route('/ETHER1/process', methods=["POST"])
 def Oneprocess():
 
 
@@ -193,7 +193,7 @@ def Oneprocess():
 #---------------------------------------------------------------------------------------------------------------------------
 
 
-@app.route('/balance/<id>', methods=["GET", "POST"])
+@app.route('/HALO/balance/<id>', methods=["GET", "POST"])
 
 def balance(id):
 
@@ -211,7 +211,7 @@ def balance(id):
 #--------------------------------------------------------------------------------------------------------------------------------
 
 
-@app.route('/ether1/balance/<id>', methods=["GET", "POST"])
+@app.route('/ETHER1/balance/<id>', methods=["GET", "POST"])
 
 def Onebalance(id):
 
@@ -227,7 +227,7 @@ def Onebalance(id):
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
-@app.route('/tx/<id>')
+@app.route('/HALO/tx/<id>')
 
 def transResolve(id):
 
@@ -247,33 +247,38 @@ def about():
 
 @app.route("/dex") 
 def dex():
-    return render_template("dex.html")
+    return render_template("/HALO/dex.html")
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
 
 
-@app.route("/powercontract") 
+@app.route("/HALO/powercontract") 
 
 def powercontract():
 	PWR_contract = powerball()
-	return render_template("PowerContract.html", result= PWR_contract)
+	return render_template("/HALO/PowerContract.html", result= PWR_contract)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
 
-@app.route("/None") 
+@app.route("/HALO/None") 
 def whoops():
-    return render_template("whoops.html")
+    return render_template("/HALO/whoops.html")
+
+@app.route("/ETHER1/None") 
+def Onewhoops():
+    return render_template("/ETHER1/whoops.html")
 
 #-------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------
 
-@app.route('/solvency')
+@app.route('/HALO/solvency')
 
 def solvent():
 
 	result = solvency()
-	return render_template('solvent.html', result= result)
+	return render_template('/HALO/solvent.html', result= result)
 
 
 @app.route('/')

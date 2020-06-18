@@ -391,17 +391,17 @@ def query(search):
 	error = None
 
 	if len(search) == 42:
-		search = "https://www.haloexplorer.com/balance/{}".format(search) # is this an address?
+		search = "/HALO/balance/{}".format(search) # is this an address?
 		return search
 
 	if len(search) == 66:
-		search = "https://www.haloexplorer.com/tx/{}".format(search)#is this a transaction?
+		search = "/HALO/tx/{}".format(search)#is this a transaction?
 		return search
 
 	if len(search) <= 8:
 		try:
 		   val = int(search)
-		   search = "https://www.haloexplorer.com/block/{}".format(search)# is this a block number / invalid at block 100000000 Y2K
+		   search = "/HALO/block/{}".format(search)# is this a block number / invalid at block 100000000 Y2K
 		   return search
 
 		except ValueError:
@@ -414,17 +414,17 @@ def Onequery(search):
 	error = None
 
 	if len(search) == 42:
-		search = "https://www.haloexplorer.com/ether1/balance/{}".format(search) # is this an address?
+		search = "/ETHER1/balance/{}".format(search) # is this an address?
 		return search
 
 	if len(search) == 66:
-		search = "https://www.haloexplorer.com/ether1/tx/{}".format(search)#is this a transaction?
+		search = "/ETHER1/tx/{}".format(search)#is this a transaction?
 		return search
 
 	if len(search) <= 8:
 		try:
 		   val = int(search)
-		   search = "https://www.haloexplorer.com/ether1/block/{}".format(search)# is this a block number / invalid at block 100000000 Y2K
+		   search = "/ETHER1/block/{}".format(search)# is this a block number / invalid at block 100000000 Y2K
 		   return search
 
 		except ValueError:

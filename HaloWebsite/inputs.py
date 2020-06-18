@@ -1492,7 +1492,7 @@ def blockMined(receivedInput):
 	reward = "Unknown Not DB"
 	try:
 		for x in myCol2.find({"block_number": bn}):
-			reward = x["reward"]
+			reward = " {} ETHO".format(x["reward"][:5])
 	except:
 		reward = "Unknown"
 
@@ -1519,7 +1519,8 @@ def blockMined(receivedInput):
 	"value"					: value,
 	"reward" 				: reward,
 	"block_timestamp"		: onetimestamp(receivedInput['timestamp']),
-	"description"			: "BlockMined"
+	"description"			: "BlockMined",
+	"difficulty"			: receivedInput['difficulty'] / 1000000000
 
 	}
 
