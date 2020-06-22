@@ -136,7 +136,7 @@ do
 			echo 
 			echo 
 			
-			./func.py
+			./func2.py
 			#./PopulateEthDeposit.py
 		
 			echo 

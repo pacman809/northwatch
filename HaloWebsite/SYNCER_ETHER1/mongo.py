@@ -10,6 +10,7 @@ def unique(list1):
 		unique_list = []
 		for x in list1:
 			if x not in unique_list: 
+				print(x)
 				unique_list.append(x) 
 		for x in unique_list: 
 			return unique_list 
@@ -25,7 +26,8 @@ def results(address):
 	#db2			=   "block_rewards"
 	mydb 		= 	myclient[db]
 	#mydb2		=	myclient2[db2]
-	myCol 		= 	mydb["temp"]
+	myCol 		= 	mydb["blocks"]
+	#myCol 		= 	mydb["temp"]
 	myCol2 		= 	mydb["block_rewards"]
 	#mycol3		=   mydb2["accountpayout"]
 	

@@ -3,7 +3,7 @@
 <html>
     <head>
         {% include 'google.html' %}
-        <title>Site is down for maintenance</title>
+        <title>NorthWatch Block Explorer</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style type="text/css">
@@ -19,12 +19,13 @@
     </head>
     <body>
         <article>
-            <h1>Site is temporarily unavailable.</h1>
-            <p>Scheduled maintenance is currently in progress. Please check back soon.</p>
+            <h1>Site is temporarily unavailable....... Kinda :)</h1>
+            <p>Scheduled maintenance and updates are currently in progress. Please check back soon.</p>
             <p>We apologize for any inconvenience.</p>
             <p>BETA VERSIONS HERE. "MAY CONTAIN BUGS AND BEETLES"</p>
-            <p><a href="/HALO">HALO PLATFORM</a></p>
-            <p><a href="/ETHER1">ETHER-1</a></p>
+            <p><a href="/HALO">HALO PLATFORM "COMPLETE"             Block = {{ status.Halo }}</a></p>
+            <p><a href="/ETHER1">ETHER-1 "COMPLETE"                  Block = {{ status.Ether1 }}</a></p>
+            <p><a href="/EGEM">ETHERGEM "Work In Progress"              Block = {{ status.Egem }}</a></p>
             <br>
             <p id="signature">&mdash;NorthWatch</p>
         </article>

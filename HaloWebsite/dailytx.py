@@ -39,8 +39,8 @@ def OnedailyTransactions():
         web3 = one_connect_geth()
 
         
-        myCol           =       database()["blocks"]
-        myCol2          =       database()["transactions"]
+        myCol           =       Onedatabase()["blocks"]
+        myCol2          =       Onedatabase()["transactions"]
         count = 0
 
 

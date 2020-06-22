@@ -11,27 +11,32 @@ import search
 db 			= "ether1-explorer-mainnet"
 myclient 	= pymongo.MongoClient("mongodb://localhost:27017/")
 mydb 		= myclient[db]
+myCol 		= mydb["blocks"]
 #myCol 		= mydb["temp"]
-myCol 		= mydb["temp"]
 list 		= []
 MN_Array 	= []
 percent_base = 0
 
 #--------------------------- MINING REWARDS --------------------------------
-try:	
+try:
+	print("Starting .....")	
 	for x in myCol.find():
 		list.extend([x["number"]])
-		input = ("wait")
-	
-	MN_Array 	= mongo.unique(list)
-	length 		= len(MN_Array)
+		print(x["number"])
+		#input = ("wait")
+	#MN_Array 	= mongo.unique(list)
+	print("Unique Done")
+	print()
+	print()
+	length = len(list)
+	#length 		= len(MN_Array)
 	#print("step1")
 	#print([x["number"]])
 
 
 	
-
-	for x in MN_Array:
+	for x in list:
+	#for x in MN_Array:
 		#os.system('clear')
 		print()
 		#print(x)

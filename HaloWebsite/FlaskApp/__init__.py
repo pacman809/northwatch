@@ -1,14 +1,15 @@
+import codecs
 from flask import Flask, request, render_template, flash, redirect, send_file
 from dailytx import dailyTransactions, OnedailyTransactions
 from web3 import Web3
 from heth import solvency
-from explorerdryrun import getAccountHistory, OnegetAccountHistory
-from latesttx import lastTx, OnelastTx
-
+from explorerdryrun import getAccountHistory, OnegetAccountHistory, TwogetAccountHistory
+from latesttx import lastTx, OnelastTx, TwolastTx
+from status import NodeStatus
 import os
 from flask import send_from_directory
 from powerball import powerball
-from data import onetimestamp,OneblockResults, performance, masternode, payout, query, Onequery, balanceInfo, OnebalanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
+from data import OnetransResults, onetimestamp, OneblockResults, TwoblockResults, performance, masternode, payout, query, Onequery, Twoquery, balanceInfo, OnebalanceInfo, TwobalanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -84,6 +85,18 @@ def ether1main():
 
 	
 #---------------------------------------------------------------------------------------------------------------------------
+
+
+
+@app.route('/EGEM', methods=["GET", "POST"])
+def egemmain():
+
+        history = TwolastTx()
+        return render_template('/EGEM/index.html', history= history )
+        #return render_template('maint.html')
+
+
+#---------------------------------------------------------------------------------------------------------------------------
 @app.route('/HALO/stats')
 def stats():
 
@@ -134,7 +147,7 @@ def block(id):
 
 #---------------------------------------------------------------------------------------------------------------------------
 
-@app.route('/ether1/block/<id>', methods=['GET', 'POST'])
+@app.route('/ETHER1/block/<id>', methods=['GET', 'POST'])
 
 
 def Oneblock(id):
@@ -157,6 +170,35 @@ def Oneblock(id):
 	else:
 		status = "Not Databased RPC call coming"	
 		return render_template('/ETHER1/block.html', result= result, id= id, status= status)
+
+#---------------------------------------------------------------------------------------------------------------------------
+@app.route('/EGEM/block/<id>', methods=['GET', 'POST'])
+
+
+def Twoblock(id):
+	
+	block 				= int(id)
+	result 				= TwoblockResults(block)
+	transactions 		= result
+	current 			= Oneperformance()
+	#extradata 			= result["extra_data"]
+	extra_data			= result['extra_data'][2:]
+	extra_data 			= codecs.decode(extra_data, "hex").decode('utf-8')
+
+	#data = result["input"]
+	#inputData = getType(data)	
+
+	if result is not  None:
+		confirmations = current["BLOCKNUMBER"] - result["number"]
+		status = "Database"
+		#value = Web3.fromWei(result["value"], 'Ether')
+		time = onetimestamp(result["timestamp"])
+
+		return render_template('/EGEM/block.html', result= result, id= id, status= status, confirmations= confirmations, time= time, extra_data= extra_data)
+
+	else:
+		status = "Not Databased RPC call coming"	
+		return render_template('/EGEM/block.html', result= result, id= id, status= status)
 
 #---------------------------------------------------------------------------------------------------------------------------
 @app.route('/HALO/process', methods=["POST"])
@@ -184,7 +226,20 @@ def Oneprocess():
 		try:
 			return redirect(searchUrl)
 		except Exception as e:
-			return redirect("https://{}/ether1").format(site_url)
+			return redirect("https://{}/ETHER1").format(site_url)
+		
+
+
+@app.route('/EGEM/process', methods=["POST"])
+def Twoprocess():
+
+
+		search = request.form['search']
+		searchUrl = Twoquery(search)
+		try:
+			return redirect(searchUrl)
+		except Exception as e:
+			return redirect("https://{}/EGEM").format(site_url)
 		
 
 
@@ -226,6 +281,22 @@ def Onebalance(id):
 	
 
 
+
+@app.route('/EGEM/balance/<id>', methods=["GET", "POST"])
+
+def Twobalance(id):
+
+	#masternode1 = masternode(id)
+	history = TwogetAccountHistory(id)
+	balance = TwobalanceInfo(id)
+	return render_template('/EGEM/balance.html', balance= balance, address= id, history= history[0], txCount= history[1])
+	balance.clear()
+	balance = {}
+	masternode1 = {}
+	history = {}
+	
+
+
 #--------------------------------------------------------------------------------------------------------------------------------
 @app.route('/HALO/tx/<id>')
 
@@ -234,6 +305,22 @@ def transResolve(id):
 	results = transResults(id)
 	parse 	= rawParse(results["input"])
 	return render_template('/HALO/transaction.html', results= results, parse= parse)
+
+
+@app.route('/ETHER1/tx/<id>')
+
+def OnetransResolve(id):
+
+	try:
+		results = OnetransResults(id)
+		parse 	= rawParse(results["input"])
+		return render_template('/ETHER1/transaction.html', results= results, parse= parse)
+	except:
+		results = OnetransResults(id)
+		parse 	= "No Input"
+		return render_template('/ETHER1/transaction.html', results= results, parse= parse)
+
+#-------------------------------------------------------------------------------------------------------------------------------	
 
 #-------------------------------------------------------------------------------------------------------------------------------
 
@@ -284,8 +371,8 @@ def solvent():
 @app.route('/')
 
 def maint():
-
-	return render_template('/MAINT/maint.html')	
+	status = NodeStatus()
+	return render_template('/MAINT/maint.html', status= status)	
 
 if __name__ == '__main__':
    app.run()
