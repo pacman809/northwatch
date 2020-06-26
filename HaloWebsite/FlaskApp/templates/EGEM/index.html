@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+  {% include 'google.html' %}
+  <meta name="keywords" content="Block Explorer, EtherGem, EGEM, Eth fork, Blocks, NorthWatch, Cryptocurrency">
+  <meta name="description" content="The Latest 100 Blocks On The EtherGem Blockchain Fueled By The NorthWatch Crypto Engine. Discover What The Output Of Input Can Do".>
+  <meta name="author" content="NorthWatch">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="XHJWwNDuD04I0bQxzGN5U--RHq28Bwc_1qFWtBRIHzk" />
+
+
+  <title>EtherGem Block Explorer</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+  <link href="static/css/egem.css" rel="stylesheet" type="text/css">
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="http://example.com/images/apple-touch-icon.png" />
+   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+
+
+<body>
+
+{%  include '/EGEM/header.html'  %}
+
+
+{%  include '/EGEM/hero.html'  %}
+
+<div style="color: grey" align="center">
+<h1>Latest 100 Blocks/Transactions</h1>
+</div>
+
+<table align="center" style="display: block; overflow-x: auto ; width: 90%" >
+        <tr>
+                <th>Latest</th>
+                <th>Blocks</th>
+        </tr>
+
+{% for history in history %}
+    
+    <tr>
+  <td style="white-space:pre-wrap">{{ history.block_timestamp }} <img src="/static/img/transaction.png" width="30" height="" style="float: right" class="inOut">
+<a href="/EGEM/block/{{ history.block_number }} " style=" color: #7F91B9">{{ history.block_number }}</a> 
+</td>
+  <td style="white-space:pre-wrap"><u>{{ history.descriptor }} </u>
+Hash <a href="/EGEM/tx/{{ history.hash }} " style=" color: #7F91B9">{{ history.hash | truncate(25,true,' .....') }}</a></td>
+  {% if history.description == "BlockMined" %}
+   
+  <td>Miner: <a href="/EGEM/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a><br>
+    Difficulty {{ history.difficulty }} G/H
+  <td style="white-space:pre-wrap"><a href ="https://www.{{ history.value }} " style=" color: #FFFF33"> {{ history.value }} <br> {{ history.reward }} </td>
+  
+  
+  {% else %}
+  
+  <td style="white-space:pre-wrap">From: <a href="/EGEM/balance/{{ history.from_address }} " style=" color: #7F91B9">{{ history.from_address }}</a>
+To: <a href="/EGEM/balance/{{ history.to_address }} " style=" color: #7F91B9">{{ history.to_address }}</a></td>
+  <td>{{ history.value }}</td>
+  
+   {% endif %} 
+
+    
+
+{% endfor %}
+
+</table>
+
+
+<!-- FOOTER -->
+{% include '/EGEM/footer.html' %}
+<!-- FOOTER - ENDS -->
+</body>
+</html>

@@ -1,0 +1,4 @@
+https://api.coingecko.com/api/v3/simple/price?ids=EtherGem&vs_currencies=USD
+https://api.coingecko.com/api/v3/simple/price?ids=ether-1&vs_currencies=USD
+https://api.coingecko.com/api/v3/simple/price?ids=halo-platform&vs_currencies=USD
+
