@@ -2123,6 +2123,40 @@ def TwoblockMined(receivedInput):
 	return result	
 
 
+def MNWithdraw(receivedInput):
+	
+	DESCRIPTOR = "Discord App Withdraw"
+
+	#value					= Web3.fromWei(receivedInput['value'], 'Ether')
+
+	value 					= receivedInput['value'] / 1000000000000000000
+	value 					= '{0:.20f}'.format(value).rstrip('0').rstrip('.')
+
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+	
+
+	result					={
+
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: value,
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+
+	}
+
+	
+	return result
+
+
 TwoInputs	= {
 	'blockmined':   TwoblockMined,
 	'0xa6f2ae3a':	onenoInfo,
@@ -2175,5 +2209,6 @@ TwoInputs	= {
 	'0xd0e30db0':	onenoInfo,
 	'0x55c081d4':	onenoInfo,
 	'0x6102cb61':	onenoInfo,
-	'0x940c70f3':	onenoInfo
+	'0x940c70f3':	onenoInfo,
+	'0x456e6a6f':	MNWithdraw
 }

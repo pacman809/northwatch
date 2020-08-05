@@ -561,7 +561,7 @@ def Oneperformance(): #ETHER1
 		return performance
 
 
-def Twoperformance(): #ETHER1
+def Twoperformance(): #EGEM
 
 		
 		mydb 		= Twodatabase()
@@ -945,6 +945,20 @@ def transResults(id):
 def OnetransResults(id):
 	
 	myCol		=	Onedatabase()["transactions"]
+	
+	try:
+		for x in myCol.find({"hash" : id}):
+			
+			x["block_timestamp"] 	= onetimestamp(x["block_timestamp"])
+			x["value"]				= '{0:.20f}'.format(x["value"] / 1000000000000000000 ).rstrip('0').rstrip('.')
+
+			return x
+	except:
+		return None
+
+def TwotransResults(id):
+	
+	myCol		=	Twodatabase()["transactions"]
 	
 	try:
 		for x in myCol.find({"hash" : id}):

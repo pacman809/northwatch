@@ -17,7 +17,7 @@ def getAccountHistory(user_address):
 	userEntry 				= user_address.lower()
 
 
-	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(400).sort('block_number', pymongo.DESCENDING):
+	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(100).sort('block_number', pymongo.DESCENDING):
 		bob = x["input"]
 		bob = str(bob[0:10])
 
@@ -48,7 +48,7 @@ def OnegetAccountHistory(user_address):
 	userEntry 				= user_address.lower()
 
 
-	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(400).sort('block_number', pymongo.DESCENDING):
+	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(100).sort('block_number', pymongo.DESCENDING):
 		bob = x["input"]
 		bob = str(bob[0:10])
 
@@ -85,7 +85,7 @@ def TwogetAccountHistory(user_address):
 
 
 
-	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(400).sort('block_number', pymongo.DESCENDING):
+	for x in myCol.find( { "$or": [ { "from_address": userEntry }, { "to_address": userEntry } ] } ).limit(100).sort('block_number', pymongo.DESCENDING):
 		bob = x["input"]
 		bob = str(bob[0:10])
 

@@ -73,8 +73,8 @@ def TwolastTx(): #EGEM
 				bob = y["input"]
 				bob = str(bob[0:10])
 
-				if bob in inputs.OneInputs:
-					result = inputs.OneInputs[str(bob)](y)
+				if bob in inputs.TwoInputs:
+					result = inputs.TwoInputs[str(bob)](y)
 					display.append(result)
 		else:
 

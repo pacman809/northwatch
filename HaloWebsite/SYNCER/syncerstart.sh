@@ -51,8 +51,7 @@ do
 		echo "phase 2"
 		then
 		   	echo
-			 echo 'Connection to Web3 Passed'
-			#currentdir=$(pwd)
+			echo 'Connection to Web3 Passed'
 			mkdir database
 
 			#--------------------------------------------------------------------------------
@@ -68,15 +67,10 @@ do
 
 
 			cd database
-			#cp  *.csv ~/fullbackup
 			echo $directory
 			find . -name *.csv -exec mv '{}' "$directory/CSV/" ";"
-			#cd $directory/CSV
-			#cp *.csv ~/fullbackup
 			cd $directory
-			#Crm -r database
 			cd $directory/CSV
-			#lastblock=$startblock
 			echo $endblock
 			echo $startblock
 			echo transactions_$startblock\_$endblock.csv
@@ -87,7 +81,6 @@ do
 			/usr/bin/mongoimport  -d halo-explorer-mainnet -c transactions --type csv --headerline --file transactions.csv ;
 			echo
 			echo Exporting Transaction to Remote
-			#/usr/bin/mongoimport --uri "mongodb://halo:halo@45.55.34.86:27017/masternode-api" --drop --collection transactions --type csv --headerline --file transactions_$startblock\_$endblock.csv ;
 			echo 
 			echo Importing Temporary Files
 			/usr/bin/mongoimport  -d halo-explorer-mainnet -c temp --type csv --headerline --file transactions.csv ;

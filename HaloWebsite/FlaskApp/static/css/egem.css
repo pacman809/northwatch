@@ -115,19 +115,17 @@ body{
 	color:rgba(255, 255, 255, 0.7) !important;
 }
 
+
 .hero-bg{
-	padding-top: 25%%;
 	background-image:url(../img/ethergem.png);
 	background-repeat:none;
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position:center;
-	width: 100%;
-	background-size: 100% 100%;
+	min-height:380px;
 	
 	text-align:center;
 }
-
 .hero-text{
 	width: 90%;
     margin-left: auto;

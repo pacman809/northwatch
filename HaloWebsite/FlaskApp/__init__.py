@@ -10,7 +10,7 @@ from status import NodeStatus
 import os
 from flask import send_from_directory
 from powerball import powerball
-from data import OnetransResults, onetimestamp, OneblockResults, TwoblockResults, performance, masternode, payout, query, Onequery, Twoquery, balanceInfo, OnebalanceInfo, TwobalanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
+from data import OnetransResults, TwotransResults, onetimestamp, OneblockResults, TwoblockResults, performance, masternode, payout, query, Onequery, Twoquery, balanceInfo, Twoperformance, OnebalanceInfo, TwobalanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -153,10 +153,16 @@ def block(id):
 
 def Oneblock(id):
 	
-	block = int(id)
-	result = OneblockResults(block)
-	transactions = result
-	current = Oneperformance()
+	block 				= int(id)
+	result 				= OneblockResults(block)
+	transactions 		= result
+	current 			= Oneperformance()
+	#extradata 			= result["extra_data"]
+	try:
+		extra_data			= result['extra_data'][2:]
+		extra_data 			= codecs.decode(extra_data, "hex").decode('utf-8')
+	except:
+		extra_data			= "Bad Hex"
 	#data = result["input"]
 	#inputData = getType(data)	
 
@@ -166,7 +172,7 @@ def Oneblock(id):
 		#value = Web3.fromWei(result["value"], 'Ether')
 		time = onetimestamp(result["timestamp"])
 
-		return render_template('/ETHER1/block.html', result= result, id= id, status= status, confirmations= confirmations, time= time)
+		return render_template('/ETHER1/block.html', result= result, id= id, status= status, confirmations= confirmations, time= time, extra_data= extra_data)
 
 	else:
 		status = "Not Databased RPC call coming"	
@@ -181,7 +187,7 @@ def Twoblock(id):
 	block 				= int(id)
 	result 				= TwoblockResults(block)
 	transactions 		= result
-	current 			= Oneperformance()
+	current 			= Twoperformance()
 	#extradata 			= result["extra_data"]
 	try:
 		extra_data			= result['extra_data'][2:]
@@ -323,6 +329,19 @@ def OnetransResolve(id):
 		results = OnetransResults(id)
 		parse 	= "No Input"
 		return render_template('/ETHER1/transaction.html', results= results, parse= parse)
+
+@app.route('/EGEM/tx/<id>')
+
+def TwotransResolve(id):
+
+	try:
+		results = TwotransResults(id)
+		parse 	= rawParse(results["input"])
+		return render_template('/EGEM/transaction.html', results= results, parse= parse)
+	except:
+		results = TwotransResults(id)
+		parse 	= "No Input"
+		return render_template('/EGEM/transaction.html', results= results, parse= parse)
 
 #-------------------------------------------------------------------------------------------------------------------------------	
 
