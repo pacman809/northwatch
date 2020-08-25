@@ -397,6 +397,13 @@ def maint():
 	status = NodeStatus()
 	return render_template('/MAINT/maint.html', status= status)	
 
+#--------------------------UPLAND STUFF---------------------------------------------
+
+@app.route('/llama)
+
+def llama():
+	   return render_template('/UPLAND/llama.html')
+
 if __name__ == '__main__':
    app.run()
 
