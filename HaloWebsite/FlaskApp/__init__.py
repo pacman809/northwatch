@@ -399,7 +399,7 @@ def maint():
 
 #--------------------------UPLAND STUFF---------------------------------------------
 
-@app.route('/llama)
+@app.route('/llama')
 
 def llama():
 	   return render_template('/UPLAND/llama.html')
