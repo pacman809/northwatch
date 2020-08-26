@@ -1,36 +1,22 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-body, html{
-  height: 100%;
+body{
+  background: #f2f2f2;
   font-family: 'Open Sans', sans-serif;
 }
 
-.bg {
-  /* The image used */
-  background-image: url("/static/img/UPLANDIMG/uplandbg.png");
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .search {
-  width: 50%;
+  width: 100%;
   position: relative;
   display: flex;
 }
 
 .searchTerm {
-  width: 50%;
+  width: 100%;
   border: 3px solid #00B4CC;
   border-right: none;
   padding: 5px;
-  height: 30px;
-  font-size:20px;
+  height: 20px;
   border-radius: 5px 0 0 5px;
   outline: none;
   color: #9DBFAF;
@@ -42,7 +28,7 @@ body, html{
 
 .searchButton {
   width: 40px;
-  height: 46px;
+  height: 36px;
   border: 1px solid #00B4CC;
   background: #00B4CC;
   text-align: center;
@@ -54,11 +40,10 @@ body, html{
 
 /*Resize the wrap to see the search bar change!*/
 .wrap{
-  width: 50%;
-  left: 50%;
-  right: 50%;
-  top: 50%;
+  width: 30%;
   position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 
