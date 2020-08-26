@@ -52,6 +52,54 @@ body, html{
   font-size: 20px;
 }
 
+.wrapper {
+  width:94%;
+  margin:auto;
+}
+
+.box {
+  max-width:320px;
+  min-height:320px;
+  margin:60px auto;
+  border:1px solid #ccc;
+  padding:10px;
+  box-shadow:0 1px 1px 1px #ccc;
+  transition: 3s ease-in all;
+  &:hover {
+     transform: rotate(30deg);
+  }
+  h2 {
+    text-align:center;
+    background-color:red;
+    color:black;
+    padding:20px;
+    margin:0;
+    border:2px solid black;
+    small {
+      text-transform:uppercase;
+      font-size:12px;
+      letter-spacing:2px;
+    }
+  }
+  .align-center {
+    text-align:center;
+  }
+}
+
+.float-left {
+  float:left;
+}
+
+.float-right {
+  float:right;
+}
+
+.clear-both {
+  clear:both;
+  padding-bottom:10px;
+}
+
+
 /*Resize the wrap to see the search bar change!*/
 .wrap{
   width: 30%;
