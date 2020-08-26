@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html>
+	<head> 
+
+	<link href="/static/css/llama.css" rel="stylesheet" type="text/css">
+	</head>
+
+<body>
+
+		
+       {{ username }}<br>
+       Level = {{ profile.level }}
+       Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
+       	{% set USD = profile.networth / 1000 %}
+       	{% set value_USD = USD %}
+       USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
+       color = {{ profile.color.color }}<br>
+       Incarcerated = {{ profile.is_in_jail }}<br>
+       <br>
+       Collections<br>
+       <br>
+       {% for x in profile.collections :%}
+
+       			{{ x.name  }}<br>
+
+       	{% endfor %}
+
+       	<br>
+       	PROPERTIES<br>
+       	<br>
+
+
+       	{% for x in profile.properties :%}
+
+
+       			{% if x.status == "Owned": %}
+       				<div class="card" style="background-color: #bcd7fb">
+       				<div class="cardOwned">
+  					<div class="container">
+  					{{ x.id }} <br>
+  					<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}">{{ x.full_address }}</a><br>
+  					<br>
+  					Prop ID = {{ x.prop_id}}<br>
+  					Street = {{ x.street.name }}<br>
+  					Current Status = {{ x.status }}<br>
+  					Location = {{ x.city.name }} {{ x.state.name }}<br>
+  					{{ count }}
+  					</div>
+				{% endif %}
+
+				{% if x.status == "For sale": %}
+       				<div class="card" style="background-color: #57a12e">
+       				<div class="cardOwned">
+  					<div class="container">
+  					{{ x.id }} <br>
+  					<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}">{{ x.full_address }}</a><br>
+  					<br>
+  					Prop ID = {{ x.prop_id}}<br>
+  					Street = {{ x.street.name }}<br>
+  					Current Status = {{ x.status }}<br>
+  					Location = {{ x.city.name }} {{ x.state.name }}<br>
+  					<br>
+  					</div>
+  					</div>
+
+				{% endif %}
+
+
+  					
+			
+			<p></p>
+				</div>
+			</div>
+   			<br>
+				
+
+       	{% endfor %}
+
+</body>
+</html>
+
+

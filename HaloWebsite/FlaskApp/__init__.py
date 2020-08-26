@@ -11,6 +11,7 @@ import os
 from flask import send_from_directory
 from powerball import powerball
 from data import OnetransResults, TwotransResults, onetimestamp, OneblockResults, TwoblockResults, performance, masternode, payout, query, Onequery, Twoquery, balanceInfo, Twoperformance, OnebalanceInfo, TwobalanceInfo, blockResults, getType, timestamp, transResults, rawParse, Oneperformance
+from Upland import UserProfile
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -398,11 +399,24 @@ def maint():
 	return render_template('/MAINT/maint.html', status= status)	
 
 #--------------------------UPLAND STUFF---------------------------------------------
-
 @app.route('/llama')
 
-def llama():
-	   return render_template('/UPLAND/llama.html')
+def my_form():
+
+    return render_template('UPLAND/llama2.html')
+
+
+@app.route('/llama', methods=['POST'])
+
+def my_form_post():
+
+	text = request.form['text']
+	text = text.lower()
+	username = text.upper()
+	profile = UserProfile(text)
+	
+	return render_template('UPLAND/llama3.html', profile= profile,  username= username)
+
 
 if __name__ == '__main__':
    app.run()
