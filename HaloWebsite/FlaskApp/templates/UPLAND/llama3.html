@@ -32,7 +32,7 @@
        	PROPERTIES<br>
        	<br>
 
-	{% length = profile.properties | length %}
+	{% set length = profile.properties | length %}
 	Total Assets = {{ length }}
        	{% for x in profile.properties :%}
 
