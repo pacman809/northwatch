@@ -9,35 +9,37 @@
 
 <body>
 
+	<div style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)" >
 		<img src="{{ profile.avatar.image }}")><br>
 
-       {{ username }}<br>
-       Level = {{ profile.level }}
-       Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
-       	{% set USD = profile.networth / 1000 %}
-       	{% set value_USD = USD %}
-       USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
-       color = {{ profile.color.color }}<br>
-       Incarcerated = {{ profile.is_in_jail }}<br>
-       <br>
-       Collections<br>
-       <br>
-       {% for x in profile.collections :%}
+	       {{ username }}<br>
+	       Level = {{ profile.level }}
+	       Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
+		{% set USD = profile.networth / 1000 %}
+		{% set value_USD = USD %}
+	       USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
+	       color = {{ profile.color.color }}<br>
+	       Incarcerated = {{ profile.is_in_jail }}<br>
+	       <br>
+	       Collections<br>
+	       <br>
+	       {% for x in profile.collections :%}
 
-       			{{ x.name  }}<br>
+				{{ x.name  }}<br>
 
-       	{% endfor %}
+		{% endfor %}
 
-       	<br>
-       	PROPERTIES<br>
-       	<br>
+		<br>
+		PROPERTIES<br>
+		<br>
 
-	{% set length = profile.properties | length %}
-	
-		<div class="boxed">
-  		Total Assets = {{ length }}
-		</div>
-	
+		{% set length = profile.properties | length %}
+
+			<div class="boxed">
+			Total Assets = {{ length }}
+			</div>
+	</div>
+		
        	{% for x in profile.properties :%}
 
        			{% if x.status == "Owned": %}
