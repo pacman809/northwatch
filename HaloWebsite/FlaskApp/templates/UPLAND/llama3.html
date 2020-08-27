@@ -4,11 +4,13 @@
 	<head> 
 
 	<link href="/static/css/llama.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 
 <body>
 
-		
+		<img src="{{ profile.avatar.image }}")><br>
+
        {{ username }}<br>
        Level = {{ profile.level }}
        Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
@@ -33,8 +35,8 @@
 
        	{% for x in profile.properties :%}
 
-
        			{% if x.status == "Owned": %}
+<!--
        				<div class="card" style="background-color: #bcd7fb">
        				<div class="cardOwned">
   					<div class="container">
@@ -47,10 +49,30 @@
   					Location = {{ x.city.name }} {{ x.state.name }}<br>
   					{{ count }}
   					</div>
-				{% endif %}
+ -->
+ 					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#bcd7fb">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
+					<div id="Demo1-{{ loop.index }}" class="w3-hide w3-animate-zoom">
+					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
+					  <a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
+					
+						<script>
+							function myFunction(id) {
+							  var x = document.getElementById(id);
+							  if (x.className.indexOf("w3-show") == -1) {
+							    x.className += " w3-show";
+							  } else { 
+							    x.className = x.className.replace(" w3-show", "");
+							  }
+							}
+						</script>
+					
+					 </div>
+			
 
+				{% endif %}
 				{% if x.status == "For sale": %}
-       				<div class="card" style="background-color: #57a12e">
+
+<!--       				<div class="card" style="background-color: #57a12e">
        				<div class="cardOwned">
   					<div class="container">
   					{{ x.id }} <br>
@@ -63,20 +85,25 @@
   					<br>
   					</div>
   					</div>
-
+-->
+  					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#57a12e">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
+					<div id="Demo1-{{ loop.index  }}" class="w3-hide w3-animate-zoom">
+					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
+					  <a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
+					  </div>
+					</div>
+			
 				{% endif %}
-
 
   					
 			
 			<p></p>
 				</div>
 			</div>
-   			<br>
+   			
 				
 
        	{% endfor %}
-
 
 
 </body>
