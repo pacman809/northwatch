@@ -33,7 +33,11 @@
        	<br>
 
 	{% set length = profile.properties | length %}
-	Total Assets = {{ length }}
+	
+		<div class="boxed">
+  		Total Assets = {{ length }}
+		</div>
+	
        	{% for x in profile.properties :%}
 
        			{% if x.status == "Owned": %}
