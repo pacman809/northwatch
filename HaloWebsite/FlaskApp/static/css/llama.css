@@ -116,3 +116,6 @@ hr {
   transform: translate(-50%, -50%);
 }
 
+.boxed {
+  border: 1px solid blue ;
+}
