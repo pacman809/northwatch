@@ -32,24 +32,13 @@
        	PROPERTIES<br>
        	<br>
 
-
+	{% length = profile.properties | length %}
+	Total Assets = {{ length }}
        	{% for x in profile.properties :%}
 
        			{% if x.status == "Owned": %}
-<!--
-       				<div class="card" style="background-color: #bcd7fb">
-       				<div class="cardOwned">
-  					<div class="container">
-  					{{ x.id }} <br>
-  					<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}">{{ x.full_address }}</a><br>
-  					<br>
-  					Prop ID = {{ x.prop_id}}<br>
-  					Street = {{ x.street.name }}<br>
-  					Current Status = {{ x.status }}<br>
-  					Location = {{ x.city.name }} {{ x.state.name }}<br>
-  					{{ count }}
-  					</div>
- -->
+				
+
  					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#bcd7fb">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
 					<div id="Demo1-{{ loop.index }}" class="w3-hide w3-animate-zoom">
 					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
@@ -72,20 +61,7 @@
 				{% endif %}
 				{% if x.status == "For sale": %}
 
-<!--       				<div class="card" style="background-color: #57a12e">
-       				<div class="cardOwned">
-  					<div class="container">
-  					{{ x.id }} <br>
-  					<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}">{{ x.full_address }}</a><br>
-  					<br>
-  					Prop ID = {{ x.prop_id}}<br>
-  					Street = {{ x.street.name }}<br>
-  					Current Status = {{ x.status }}<br>
-  					Location = {{ x.city.name }} {{ x.state.name }}<br>
-  					<br>
-  					</div>
-  					</div>
--->
+
   					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#57a12e">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
 					<div id="Demo1-{{ loop.index  }}" class="w3-hide w3-animate-zoom">
 					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
