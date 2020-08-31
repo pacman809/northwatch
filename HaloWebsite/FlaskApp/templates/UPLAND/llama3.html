@@ -11,17 +11,7 @@
 
 	<div style="position: absolute; top>" >
 	
-		{{ username }}<br>
-		Level = {{ profile.level }}
-		Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
-		{% set USD = profile.networth / 1000 %}
-		{% set value_USD = USD %}
-		USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
-		color = {{ profile.color.color }}<br>
-		Incarcerated = {{ profile.is_in_jail }}<br>
-		<br>
-		Collections<br>
-		<br>
+	
 		{% for x in profile.collections :%}
 
 		{{ x.name  }}<br>
@@ -101,16 +91,22 @@
 	</div>
         <div class="card_bottom">
           <div class="card_category">
-            Travel
+            {{ username }}
           </div>
           <div class="card_info">
-            <p class="title">10 Best Things about Travel</p>
+            <p class="title">Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png"></p>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, ab.
+             Level = {{ profile.level }}
+			<br>
+		{% set USD = profile.networth / 1000 %}
+		{% set value_USD = USD %}
+		USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
+		color = {{ profile.color.color }}<br>
+		Incarcerated = {{ profile.is_in_jail }}<br>
             </p>
           </div>
           <div class="card_creator">
-            By Alex Kato
+            NorthWatch
           </div>
         </div>
       </div>
