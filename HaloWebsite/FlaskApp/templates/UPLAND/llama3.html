@@ -95,15 +95,12 @@
           </div>
           <div class="card_info">
             <p class="title">Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png"></p>
-            <p>
-             Level = {{ profile.level }}
-			<br>
-		{% set USD = profile.networth / 1000 %}
-		{% set value_USD = USD %}
-		USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
-		color = {{ profile.color.color }}<br>
-		Incarcerated = {{ profile.is_in_jail }}<br>
-            </p>
+		  <p>Level = {{ profile.level }}</p>
+		  	{% set USD = profile.networth / 1000 %}
+			{% set value_USD = USD %}
+		  <p>USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg"></p>
+		  <p>color = {{ profile.color.color }}</p>
+		  <p>Incarcerated = {{ profile.is_in_jail }}</p>
           </div>
           <div class="card_creator">
             NorthWatch
