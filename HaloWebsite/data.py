@@ -657,29 +657,29 @@ def masternode(personal_address):
 
 def payout():
 
-		try:
+	try:
 
-			myCol 		= database()["transactions"]
-			list 		= []
+		myCol 		= database()["transactions"]
+		list 		= []
+		
+
+		for x in myCol.find({"to_address": "0xc660934ec084698e373ac844ce29cf27b104f696"}).limit(1000).sort('block_number', pymongo.DESCENDING):
 			
+			payout_input = str(x["input"][0:10])
 
-			for x in myCol.find({"to_address": "0xc660934ec084698e373ac844ce29cf27b104f696"}).limit(1000).sort('block_number', pymongo.DESCENDING):
-				
-				payout_input = str(x["input"][0:10])
+			if payout_input == "0xdf6c39fb":
+				list.append(x["block_timestamp"])
 
-				if payout_input == "0xdf6c39fb":
-					list.append(x["block_timestamp"])
+				payout = list[0]
+				payout = timestamp(payout)
 
-					payout = list[0]
-					payout = timestamp(payout)
+				return payout
 
-			return payout
+	except:
 
-		except:
+		payout = "No Data"
 
-			payout = "No Data"
-
-			return payout
+		return payout
 	
 
 #############################################################

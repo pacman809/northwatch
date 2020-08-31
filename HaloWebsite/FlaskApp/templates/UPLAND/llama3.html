@@ -1,31 +1,30 @@
-
+	
 <!DOCTYPE html>
 <html>
-	<head> 
+<head> 
 
 	<link href="/static/css/llama.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	</head>
+</head>
 
 <body>
 
-	<div style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)" >
-		<img src="{{ profile.avatar.image }}")><br>
-
-	       {{ username }}<br>
-	       Level = {{ profile.level }}
-	       Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
+	<div style="position: absolute; top>" >
+	
+		{{ username }}<br>
+		Level = {{ profile.level }}
+		Networth = {{ profile.networth}} <img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/UPX.png">	<br>
 		{% set USD = profile.networth / 1000 %}
 		{% set value_USD = USD %}
-	       USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
-	       color = {{ profile.color.color }}<br>
-	       Incarcerated = {{ profile.is_in_jail }}<br>
-	       <br>
-	       Collections<br>
-	       <br>
-	       {% for x in profile.collections :%}
+		USD = {{ "${:,.2f}".format(value_USD) }}$<img  style="width:30px;height:30px; "src="/static/img/UPLANDIMG/USD.jpeg">	<br><br>
+		color = {{ profile.color.color }}<br>
+		Incarcerated = {{ profile.is_in_jail }}<br>
+		<br>
+		Collections<br>
+		<br>
+		{% for x in profile.collections :%}
 
-				{{ x.name  }}<br>
+		{{ x.name  }}<br>
 
 		{% endfor %}
 
@@ -35,59 +34,87 @@
 
 		{% set length = profile.properties | length %}
 
-			<div class="boxed">
+		<div class="boxed">
 			Total Assets = {{ length }}
-			</div>
+		</div>
+
 	</div>
+
+	{% for x in profile.properties :%}
+
+	{% if x.status == "Owned": %}
+
+
+		<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#bcd7fb">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
+
+		<div id="Demo1-{{ loop.index }}" class="w3-hide w3-animate-zoom">
+			<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
+			<a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
+
+			<script>
+				function myFunction(id) {
+					var x = document.getElementById(id);
+					if (x.className.indexOf("w3-show") == -1) {
+						x.className += " w3-show";
+					} else { 
+						x.className = x.className.replace(" w3-show", "");
+					}
+				}
+			</script>
+
+		</div>
+
+
+	{% endif %}
+	{% if x.status == "For sale": %}
+
+
+		<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#57a12e">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
+
+		<div id="Demo1-{{ loop.index  }}" class="w3-hide w3-animate-zoom">
+
+			<a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
+			<a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
 		
-       	{% for x in profile.properties :%}
-
-       			{% if x.status == "Owned": %}
-				
-
- 					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#bcd7fb">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
-					<div id="Demo1-{{ loop.index }}" class="w3-hide w3-animate-zoom">
-					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
-					  <a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
-					
-						<script>
-							function myFunction(id) {
-							  var x = document.getElementById(id);
-							  if (x.className.indexOf("w3-show") == -1) {
-							    x.className += " w3-show";
-							  } else { 
-							    x.className = x.className.replace(" w3-show", "");
-							  }
-							}
-						</script>
-					
-					 </div>
-			
-
-				{% endif %}
-				{% if x.status == "For sale": %}
+		</div>
 
 
-  					<button  onclick="myFunction('Demo1-{{ loop.index }}')" class="w3-button w3-block w3-left-align" style="background-color:#57a12e">{{ x.full_address }} <br> {{ x.city.name }}, {{ x.state.name }}</button>
-					<div id="Demo1-{{ loop.index  }}" class="w3-hide w3-animate-zoom">
-					  <a href="https://play.upland.me/properties?prop_id={{ x.prop_id }}" target="_blank" class="w3-button w3-block w3-left-align">{{ x.prop_id }} Lets Go!</a>
-					  <a href="#" class="w3-button w3-block w3-left-align">{{ x.status }}</a>
-					  </div>
-					</div>
-			
-				{% endif %}
-
-  					
-			
-			<p></p>
-				</div>
-			</div>
-   			
-				
-
-       	{% endfor %}
+	{% endif %}
 
 
+
+<p></p>
+</div>
+</div>
+
+
+
+{% endfor %}
+
+<div class="wrapper">
+  <div class="cards_wrap">
+    <div class="card_item">
+      <div class="card_inner">
+        <div class="card_top">
+
+         <img src="{{ profile.avatar.image }}" alt÷"car" />
+	</div>
+        <div class="card_bottom">
+          <div class="card_category">
+            Travel
+          </div>
+          <div class="card_info">
+            <p class="title">10 Best Things about Travel</p>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, ab.
+            </p>
+          </div>
+          <div class="card_creator">
+            By Alex Kato
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
 

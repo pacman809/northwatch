@@ -396,7 +396,7 @@ def solvent():
 
 def maint():
 	status = NodeStatus()
-	return render_template('/MAINT/maint.html', status= status)	
+	return render_template('/northwatch.html', status= status)	
 
 #--------------------------UPLAND STUFF---------------------------------------------
 @app.route('/llama')
