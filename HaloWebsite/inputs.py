@@ -2185,6 +2185,35 @@ def contractDeploymentEGEM(receivedInput):
 	
 	return result
 
+
+
+
+def NFTMinted(receivedInput):
+	
+	DESCRIPTOR = "NFT Minted"
+
+	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+
+	result					={
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: "NFT Created",
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+							}
+
+	
+	return result
+
 #---------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -2232,6 +2261,7 @@ TwoInputs	= {
 	'0x0a9ef927':	onenoInfo,
 	'0x4e71d92d':	EthoFuse,
 	'0x'		:	TwoTx,
+	'0x6a627842':	NFTMinted,
 	'0x04fc7c6d':	onenoInfo,
 	'0x230d6ed8':	onenoInfo,
 	'0xd65ab5f2':	onenoInfo,
