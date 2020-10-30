@@ -2159,7 +2159,7 @@ def MNWithdraw(receivedInput):
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
-def contractDeployment(receivedInput):
+def contractDeploymentEGEM(receivedInput):
 	
 	DESCRIPTOR = "Contract Deployed"
 
