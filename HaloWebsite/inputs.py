@@ -660,6 +660,7 @@ def ContractDeploy(receivedInput):
 #---------------------------------------------------------------------------------------------------
 
 
+
 def SmartContract(receivedInput):
 	
 	DESCRIPTOR = "Smart Contract Interaction"
@@ -2156,6 +2157,36 @@ def MNWithdraw(receivedInput):
 	
 	return result
 
+#-----------------------------------------------------------------------------------------------------------------------------
+
+def contractDeployment(receivedInput):
+	
+	DESCRIPTOR = "Contract Deployed"
+
+	value					= Web3.fromWei(receivedInput['value'], 'Ether')
+	description 			= f'From {receivedInput["from_address"]} To  {receivedInput["to_address"]}'
+
+	result					={
+	"descriptor"			: DESCRIPTOR,
+	"hash" 					: receivedInput['hash'],			
+	"nonce"					: receivedInput['nonce'],
+	"block_hash"			: receivedInput['block_hash'],
+	"block_number"			: receivedInput['block_number'],
+	"transaction_index"		: receivedInput['transaction_index'],
+	"from_address"			: receivedInput['from_address'],
+	"to_address"			: receivedInput['to_address'],
+	"value"					: "Deployment",
+	"gas" 					: receivedInput['gas'],
+	"gas_price"				: receivedInput['gas_price'],
+	"block_timestamp"		: onetimestamp(receivedInput['block_timestamp']),
+	"description"			: description
+							}
+
+	
+	return result
+
+#---------------------------------------------------------------------------------------------------------------------------------------------
+
 
 TwoInputs	= {
 	'blockmined':   TwoblockMined,
@@ -2165,7 +2196,7 @@ TwoInputs	= {
 	'0x1986a58c':	onenoInfo,
 	'0xc4d66de8':	onenoInfo,
 	'0xb61d27f6':	onenoInfo,
-	'0x60806040':	contractDeployment,
+	'0x60806040':	contractDeploymentEGEM,
 	'0xa1adbb25':	onenoInfo,
 	'0x2e1a7d4d':	onenoInfo,
 	'0x3ccfd60b':	onenoInfo,
@@ -2185,7 +2216,7 @@ TwoInputs	= {
 	'0xf2fde38b':	onenoInfo,
 	'0xfdb5a03e':	EthoFuse,
 	'0x19b667da':	onenoInfo,		
-	'0x60606040':	contractDeployment,
+	'0x60606040':	contractDeploymentEGEM,
 	'0x797af627':	onenoInfo,
 	'0x467fba0f':	onenoInfo,
 	'0x424c4f43':	onenoInfo,
