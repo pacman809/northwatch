@@ -4,7 +4,7 @@ blinker==1.4
 cffi==1.13.2
 Click==7.0
 colorama==0.3.7
-cryptography==2.3
+cryptography==3.3.2
 cycler==0.10.0
 dnspython==1.15.0
 enum34==1.1.6
