@@ -38,4 +38,4 @@ six==1.14.0
 subprocess32==3.5.4
 typing==3.7.4.1
 virtualenv==16.7.5
-Werkzeug==0.15.6
+Werkzeug==2.2.3
